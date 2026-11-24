@@ -19,31 +19,31 @@ const path = require('path');
   );
   console.log('overflow(px):', JSON.stringify(overflow));
 
-  for (const n of [1, 2, 3, 4]) {
+  for (const n of [1, 2, 3, 4, 5, 6]) {
     await page.locator(`.page[data-p="${n}"]`).screenshot({ path: path.join(dir, 'preview', `p${n}.png`) });
   }
 
   await page.pdf({
-    path: path.join(dir, '스테디윈스_회사소개서_A4_4p.pdf'),
+    path: path.join(dir, '스테디윈스_회사소개서_A4_6p.pdf'),
     width: '210mm', height: '297mm', printBackground: true, preferCSSPageSize: true,
   });
 
-  // A3 터잡기: 바깥면 = 4쪽 | 1쪽, 안쪽면 = 2쪽 | 3쪽
-  await page.addStyleTag({ content: '@page{size:420mm 297mm;margin:0}' });
+  // 3단 접지 터잡기(630×297mm): 바깥면 = 5쪽 | 6쪽 | 1쪽, 안쪽면 = 2쪽 | 3쪽 | 4쪽
+  await page.addStyleTag({ content: '@page{size:630mm 297mm;margin:0}' });
   await page.evaluate(() => {
     const get = (n) => document.querySelector(`.page[data-p="${n}"]`);
-    const mk = (a, b) => {
+    const mk = (...ns) => {
       const s = document.createElement('div');
       s.className = 'sheet';
-      s.append(get(a), get(b));
+      s.append(...ns.map(get));
       return s;
     };
     document.body.classList.add('impose');
-    document.body.append(mk(4, 1), mk(2, 3));
+    document.body.append(mk(5, 6, 1), mk(2, 3, 4));
   });
   await page.pdf({
-    path: path.join(dir, '스테디윈스_회사소개서_A3_접지인쇄용.pdf'),
-    width: '420mm', height: '297mm', printBackground: true,
+    path: path.join(dir, '스테디윈스_회사소개서_3단접지_인쇄용.pdf'),
+    width: '630mm', height: '297mm', printBackground: true,
   });
   await browser.close();
 })();
