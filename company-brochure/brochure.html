@@ -277,6 +277,22 @@ img{display:block}
 .back .bv{font-size:12.5pt;line-height:1.6;font-weight:400;text-align:center;margin-top:9mm}
 .back .slogan{margin-top:5mm;font-size:13pt}
 
+
+/* 선과 스파크: 얇은 선 위의 점, 끝은 스파크 */
+.head{position:relative}
+.orn{position:absolute;right:0;top:50%;transform:translateY(-50%);width:72mm;height:21.6mm;overflow:visible}
+.orn path{fill:none;stroke:#a9a9ad;stroke-width:.7}
+.orn circle{fill:#fff;stroke:#8a8a8e;stroke-width:.7}
+.steps,.solve{position:relative}
+.steps::before,.solve::before{content:"";position:absolute;left:0;right:2.6mm;top:1.3mm;height:.25mm;background:#a9a9ad}
+.steps::after,.solve::after{content:"";position:absolute;right:0;top:-.2mm;width:3.2mm;height:3.2mm;background:url("assets/steadywins-spark.svg") center/contain no-repeat}
+.step,.solve div{position:relative;border-top:0;padding-top:5.4mm}
+.step::before,.solve div::before{content:"";position:absolute;left:0;top:.2mm;width:2.4mm;height:2.4mm;border-radius:50%;background:#fff;border:.25mm solid #8a8a8e}
+.tline::before{height:.25mm;background:#a9a9ad;right:2.6mm;top:8.6mm}
+.tline::after{border:0;right:0;top:7.1mm;width:3.2mm;height:3.2mm;background:url("assets/steadywins-spark.svg") center/contain no-repeat}
+.tl .dot{width:2.4mm;height:2.4mm;border:.25mm solid #8a8a8e;top:.5mm}
+.tl.now .dot{background:#fff;border-color:var(--orange);border-width:.5mm}
+
 /* 접지 대지(인쇄용 터잡기) */
 body.impose{background:#fff}
 body.impose .sheet{width:630mm;height:297mm;display:flex;page-break-after:always;break-after:page}
@@ -308,6 +324,7 @@ body.impose .page{page-break-after:auto;break-after:auto;flex:none}
   <div class="pad">
     <div class="run"><img src="assets/steadywins-ko.svg" alt="스테디윈스"><span class="pg">비전</span></div>
     <div class="head big">
+      <svg class="orn" viewBox="0 0 200 60" aria-hidden="true"><path d="M2 52 C 50 54, 78 18, 120 22 S 170 34, 188 10"/><circle cx="38" cy="48.6" r="1.7"/><circle cx="84" cy="26.5" r="1.7"/><circle cx="133" cy="23.6" r="1.7"/><image href="assets/steadywins-spark.svg" x="185" y="3" width="10" height="10"/></svg>
       <h2>재밌는 도시, 따뜻한 사회,<br>차가운 지구 만들기.</h2>
     </div>
 
@@ -373,6 +390,7 @@ body.impose .page{page-break-after:auto;break-after:auto;flex:none}
   <div class="pad">
     <div class="run"><img src="assets/steadywins-ko.svg" alt="스테디윈스"><span class="pg">서비스 라인</span></div>
     <div class="head big">
+      <svg class="orn" viewBox="0 0 200 60" aria-hidden="true"><path d="M2 14 C 44 8, 70 44, 112 40 S 168 16, 188 30"/><circle cx="40" cy="19.3" r="1.7"/><circle cx="92" cy="41.6" r="1.7"/><circle cx="147" cy="29.5" r="1.7"/><image href="assets/steadywins-spark.svg" x="185" y="26" width="10" height="10"/></svg>
       <h2>참여부터 성과 데이터까지,<br>자체 개발 서비스</h2>
     </div>
     <div class="bento">
@@ -429,6 +447,7 @@ body.impose .page{page-break-after:auto;break-after:auto;flex:none}
   <div class="pad">
     <div class="run"><img src="assets/steadywins-ko.svg" alt="스테디윈스"><span class="pg">주요 실적 및 사례</span></div>
     <div class="head big">
+      <svg class="orn" viewBox="0 0 200 60" aria-hidden="true"><path d="M2 44 C 36 20, 76 22, 104 36 S 156 52, 188 16"/><circle cx="30" cy="28.5" r="1.7"/><circle cx="86" cy="27.8" r="1.7"/><circle cx="140" cy="45" r="1.7"/><image href="assets/steadywins-spark.svg" x="185" y="9" width="10" height="10"/></svg>
       <h2>앱 출시 이후,<br>기록으로 남은 참여입니다.</h2>
     </div>
     <div class="stats">
@@ -478,6 +497,7 @@ body.impose .page{page-break-after:auto;break-after:auto;flex:none}
   <div class="pad">
     <div class="run"><img src="assets/steadywins-ko.svg" alt="스테디윈스"><span class="pg">연혁 및 인증</span></div>
     <div class="head big">
+      <svg class="orn" viewBox="0 0 200 60" aria-hidden="true"><path d="M2 30 C 40 50, 70 46, 100 30 S 150 8, 188 24"/><circle cx="36" cy="42.5" r="1.7"/><circle cx="100" cy="30" r="1.7"/><circle cx="150" cy="15.8" r="1.7"/><image href="assets/steadywins-spark.svg" x="185" y="20" width="10" height="10"/></svg>
       <h2>남의 ESG를 돕기 전에,<br>우리부터 검증받았습니다.</h2>
     </div>
 
