@@ -245,6 +245,13 @@ img{display:block}
 .back .bottom{margin-top:auto;display:flex;justify-content:space-between;align-items:flex-end}
 .back .copy{margin:0}
 
+
+/* 쪽 이름은 맨 위 머리글에 */
+.run .pg{font-size:8.6pt;font-weight:600;color:var(--ink);padding-bottom:1.2mm;border-bottom:.7mm solid var(--orange)}
+.head h2{margin-top:0}
+.head{margin-top:9mm}
+.more{margin-top:6mm}
+
 /* 접지 대지(인쇄용 터잡기) */
 body.impose{background:#fff}
 body.impose .sheet{width:630mm;height:297mm;display:flex;page-break-after:always;break-after:page}
@@ -274,9 +281,8 @@ body.impose .page{page-break-after:auto;break-after:auto;flex:none}
 <!-- 2. 사업영역 -->
 <section class="page" data-p="2">
   <div class="pad">
-    <div class="run"><img src="assets/steadywins-ko.svg" alt="스테디윈스"><span>회사소개서 2027</span></div>
+    <div class="run"><img src="assets/steadywins-ko.svg" alt="스테디윈스"><span class="pg">비전</span></div>
     <div class="head big">
-      <div><span class="kicker">비전</span></div>
       <h2>재밌는 도시, 따뜻한 사회,<br>차가운 지구 만들기.</h2>
     </div>
 
@@ -340,10 +346,9 @@ body.impose .page{page-break-after:auto;break-after:auto;flex:none}
 <!-- 3. 제품·서비스 -->
 <section class="page" data-p="3">
   <div class="pad">
-    <div class="run"><span>회사소개서 2027</span><span lang="en">Leave it better.</span></div>
+    <div class="run"><img src="assets/steadywins-ko.svg" alt="스테디윈스"><span class="pg">서비스 라인</span></div>
     <div class="head big">
-      <div><span class="kicker">서비스 라인</span></div>
-      <h2>현장의 참여부터 성과 데이터까지,<br>직접 만든 서비스로 연결합니다.</h2>
+      <h2>참여부터 성과 데이터까지,<br>자체 개발 서비스</h2>
     </div>
     <div class="bento">
       <div class="box l">
@@ -382,7 +387,7 @@ body.impose .page{page-break-after:auto;break-after:auto;flex:none}
       <div><b>기관이 직접 만드는 캠페인</b><p>템플릿으로 캠페인을 만들고 관리자 화면에서 운영합니다.</p></div>
     </div>
 
-    <div class="sec" style="margin-top:8mm">서비스가 일하는 순서</div>
+    <div class="sec" style="margin-top:8mm">서비스 이용 절차</div>
     <div class="steps">
       <div class="step"><i>01</i><b>기획</b><p>지역 자료와 기관의 사업을 함께 읽고 시민 참여 캠페인으로 설계합니다.</p></div>
       <div class="step"><i>02</i><b>참여</b><p>앱에서 미션을 수행합니다. 위치와 사진으로 인증하고 1365 봉사시간으로 인정받습니다.</p></div>
@@ -397,9 +402,8 @@ body.impose .page{page-break-after:auto;break-after:auto;flex:none}
 <!-- 4. 사례 -->
 <section class="page" data-p="4">
   <div class="pad">
-    <div class="run"><img src="assets/steadywins-ko.svg" alt="스테디윈스"><span>회사소개서 2027</span></div>
+    <div class="run"><img src="assets/steadywins-ko.svg" alt="스테디윈스"><span class="pg">주요 실적 및 사례</span></div>
     <div class="head big">
-      <div><span class="kicker">사례와 데이터</span></div>
       <h2>앱 출시 이후,<br>기록으로 남은 참여입니다.</h2>
     </div>
     <div class="stats">
@@ -410,7 +414,7 @@ body.impose .page{page-break-after:auto;break-after:auto;flex:none}
     </div>
     <p class="note" style="margin-top:2mm">근거: 볼런트립 관리자 집계, 2025년 7월 20일(앱 출시일)부터 2026년 11월 10일까지. 공공기관 7곳에서 운영 중이며 경기도 31개 시·군에 적용 계약을 맺었습니다.</p>
 
-    <div class="sec" style="margin-top:8mm">함께한 프로젝트</div>
+    <div class="sec" style="margin-top:8mm">대표 사례</div>
     <div class="cases">
       <div class="case">
         <div class="ph"><img src="assets/ph-case-map.jpg" alt="휠체어를 탄 여행자가 경사로 난간 옆에서 휴대폰으로 사진을 찍고 있다."><span class="draft">시안용 사진</span></div>
@@ -432,8 +436,7 @@ body.impose .page{page-break-after:auto;break-after:auto;flex:none}
       </div>
     </div>
 
-    <div class="sec" style="margin-top:8mm">더 많은 프로젝트</div>
-    <div class="more">
+        <div class="more">
       <div><b>경기도여성가족재단</b><span>임직원이 일상에서 실천한 ESG 활동을 앱으로 기록하는 캠페인</span></div>
       <div><b>백석대학교</b><span>학생이 지역의 문제 장소를 조사하고 행정 제안서를 쓰는 리빙랩(충남 RISE)</span></div>
       <div><b>한국전력기술</b><span>에너지·환경 교육 뒤의 실천 활동 기록(우시산 협업)</span></div>
@@ -448,9 +451,8 @@ body.impose .page{page-break-after:auto;break-after:auto;flex:none}
 <!-- 5. 이력·인증·연락처 -->
 <section class="page" data-p="5">
   <div class="pad">
-    <div class="run"><span>회사소개서 2027</span><span lang="en">Leave it better.</span></div>
+    <div class="run"><img src="assets/steadywins-ko.svg" alt="스테디윈스"><span class="pg">연혁 및 인증</span></div>
     <div class="head big">
-      <div><span class="kicker">이력과 인증</span></div>
       <h2>남의 ESG를 돕기 전에,<br>우리부터 검증받았습니다.</h2>
     </div>
 
@@ -468,7 +470,7 @@ body.impose .page{page-break-after:auto;break-after:auto;flex:none}
       <div><i>2026.04</i><span>소셜벤처 인증</span></div>
     </div>
 
-    <div class="sec" style="margin-top:10mm">인증과 자격</div>
+    <div class="sec" style="margin-top:10mm">인증·자격 현황</div>
     <div class="certs">
       <div class="cert"><div class="slot">인증서 사진 자리</div><span>예비사회적기업 지정서</span></div>
       <div class="cert"><div class="slot">인증서 사진 자리</div><span>소셜벤처 확인서</span></div>
