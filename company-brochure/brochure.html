@@ -210,6 +210,41 @@ img{display:block}
 .cases{margin-top:4mm}
 .case .ph{height:56mm}
 
+
+/* 2쪽: 비전·사회문제·해결·사업분야 */
+.why{display:grid;grid-template-columns:1fr 1fr;gap:5mm;margin-top:3.5mm}
+.ev{background:var(--raised);border-left:.7mm solid var(--indigo);padding:4mm 5mm 3.8mm}
+.ev .num{font-size:30pt;font-weight:300;line-height:1.1;letter-spacing:-.02em}
+.ev .lab{font-size:8.8pt;font-weight:600;margin-top:1.2mm;line-height:1.45}
+.ev .src{font-size:6.9pt;color:var(--muted);font-weight:500;margin-top:1.6mm;line-height:1.5}
+.say{font-size:11.5pt;line-height:1.5;font-weight:500;margin-top:4mm}
+.solve{margin-top:3.5mm;display:grid;grid-template-columns:repeat(3,1fr);gap:4mm}
+.solve div{border-top:.35mm solid var(--ink);padding-top:2.4mm}
+.solve i{font-style:normal;font-size:7.4pt;font-weight:600;color:var(--muted)}
+.solve b{display:block;font-size:10.2pt;font-weight:600;margin-top:.4mm}
+.solve p{font-size:8.2pt;line-height:1.55;margin-top:1.2mm}
+.bizs{margin-top:3.5mm;display:grid;grid-template-columns:repeat(4,1fr);gap:3.5mm}
+.biz .ph{height:42mm;border-radius:2.5mm}
+.biz .no{display:block;font-size:7.2pt;font-weight:600;color:var(--muted);margin-top:2.2mm}
+.biz h3{font-size:10pt;font-weight:600;line-height:1.35;margin-top:.3mm}
+.biz .bq{font-size:7.8pt;line-height:1.5;margin-top:1.4mm}
+.biz .tags{margin-top:1.8mm;gap:.9mm}
+.biz .tags span{font-size:6.6pt;padding:.9mm 1.7mm}
+/* 3쪽: 특장점 */
+.bento{grid-auto-rows:43mm}
+.box.l .phone{height:66mm}
+.feats{margin-top:3.5mm;display:grid;grid-template-columns:repeat(3,1fr);gap:0 4mm;border-top:.35mm solid var(--ink)}
+.feats div{padding:3mm 0 3.2mm;border-bottom:.25mm solid var(--line)}
+.feats b{display:block;font-size:9.8pt;font-weight:600}
+.feats p{font-size:8.2pt;line-height:1.55;margin-top:.8mm}
+/* 6쪽: 뒷표지 */
+.back .center{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;align-items:center}
+.back .center img{width:62mm}
+.back .slogan{font-size:15pt;margin-top:7mm;letter-spacing:.01em}
+.back .pad{justify-content:flex-end}
+.back .bottom{margin-top:auto;display:flex;justify-content:space-between;align-items:flex-end}
+.back .copy{margin:0}
+
 /* 접지 대지(인쇄용 터잡기) */
 body.impose{background:#fff}
 body.impose .sheet{width:630mm;height:297mm;display:flex;page-break-after:always;break-after:page}
@@ -241,49 +276,61 @@ body.impose .page{page-break-after:auto;break-after:auto;flex:none}
   <div class="pad">
     <div class="run"><img src="assets/steadywins-ko.svg" alt="스테디윈스"><span>회사소개서 2027</span></div>
     <div class="head big">
-      <div><span class="kicker">사업영역</span></div>
-      <h2>지역의 문제를 발견하고,<br>시민의 참여를 설계하며,<br>활동의 가치를 데이터와 기술로 잇습니다.</h2>
+      <div><span class="kicker">비전</span></div>
+      <h2>재밌는 도시, 따뜻한 사회,<br>차가운 지구 만들기.</h2>
     </div>
-    <div class="areas">
-      <div class="area">
+
+    <div class="sec" style="margin-top:9mm">우리가 보는 사회문제</div>
+    <div class="why">
+      <div class="ev">
+        <div class="num">3.6%</div>
+        <div class="lab">지역 문제 해결 활동에 실제로 참여한 경기도민.<br>참여할 의향이 있다는 응답은 40.3%입니다.</div>
+        <div class="src">출처: 2024 경기도 사회조사. 참여율과 참여 의향은 모집단이 다른 지표입니다.</div>
+      </div>
+      <div class="ev">
+        <div class="num">7.5%</div>
+        <div class="lab">기업 사회공헌 지표 가운데 성과까지 측정하는 지표.<br>76.7%는 참여자 수 같은 단순 집계입니다.</div>
+        <div class="src">출처: 트리플라잇, 「데이터로 보는 100대 기업 사회공헌 이슈&amp;임팩트」(2024).</div>
+      </div>
+    </div>
+    <p class="say">참여할 뜻은 있는데 참여할 자리가 없고, 활동은 있는데 바뀐 것을 재지 못합니다.</p>
+
+    <div class="sec" style="margin-top:8mm">우리의 해결 방법</div>
+    <div class="solve">
+      <div><i>발견</i><b>지역의 문제를 찾습니다.</b><p>현장 조사와 데이터로 지역의 문제를 먼저 확인합니다.</p></div>
+      <div><i>참여</i><b>시민의 참여를 설계합니다.</b><p>문제를 시민이 참여할 수 있는 콘텐츠와 캠페인으로 만듭니다.</p></div>
+      <div><i>증명</i><b>활동의 가치를 데이터로 잇습니다.</b><p>참여 활동을 증명할 수 있는 데이터로 기록하고 보고합니다.</p></div>
+    </div>
+
+    <div class="sec" style="margin-top:8mm">사업분야</div>
+    <div class="bizs">
+      <div class="biz">
         <div class="ph"><img src="assets/ph-research.jpg" alt="강당에서 참여자들이 테이블에 둘러앉아 조사 결과를 함께 읽고 있다."></div>
-        <div class="tx">
-          <div class="l"><span class="no">01</span>
-          <h3>지역사회 조사·연구와<br>참여 프로젝트</h3>
-          <div class="tags"><span>시민과학</span><span>리빙랩</span><span>교육</span></div></div>
-          <div class="r"><div class="q">우리 지역의 문제는 무엇이며, 누가 함께 풀 수 있는가?</div>
-          <p>시민과 학생이 지역의 문제를 직접 조사하고 기록합니다. 결과는 연구와 행정 제안의 자료가 됩니다.</p></div>
-        </div>
+        <span class="no">01</span>
+        <h3>지역사회 조사·연구와<br>참여 프로젝트</h3>
+        <p class="bq">우리 지역의 문제는 무엇이며, 누가 함께 풀 수 있는가?</p>
+        <div class="tags"><span>시민과학</span><span>리빙랩</span><span>교육</span></div>
       </div>
-      <div class="area">
+      <div class="biz">
         <div class="ph"><img src="assets/ph-tour.jpg" alt="호숫가 산책로를 배낭을 멘 사람들이 함께 걷고 있다."><span class="draft">시안용 사진</span></div>
-        <div class="tx">
-          <div class="l"><span class="no">02</span>
-          <h3>지속가능관광<br>콘텐츠·프로그램</h3>
-          <div class="tags"><span>소셜투어</span><span>생태</span><span>지역 특화 프로그램</span></div></div>
-          <div class="r"><div class="q">지역을 찾은 사람은 무엇을 경험하고, 무엇을 남기는가?</div>
-          <p><b>소셜투어(Social Tour)</b> 지역의 생태·환경·사회 문제를 주제로 설계해, 참여자의 경험을 지역 이해와 행동으로 잇는 여행 프로그램.</p></div>
-        </div>
+        <span class="no">02</span>
+        <h3>지속가능관광<br>콘텐츠·프로그램</h3>
+        <p class="bq">지역을 찾은 사람은 무엇을 경험하고, 무엇을 남기는가?</p>
+        <div class="tags"><span>소셜투어</span><span>생태</span><span>지역 특화 프로그램</span></div>
       </div>
-      <div class="area">
+      <div class="biz">
         <div class="ph"><img src="assets/ph-case-plogging.jpg" alt="우비를 입은 참여자들이 풀숲에서 쓰레기를 줍고 있다."></div>
-        <div class="tx">
-          <div class="l"><span class="no">03</span>
-          <h3>ESG·CSR 실행·성과관리<br>플랫폼</h3>
-          <div class="tags"><span>볼런트립</span><span>기관 맞춤형 플랫폼</span><span>임팩트 리포팅</span></div></div>
-          <div class="r"><div class="q">누가 무엇을 했고, 어떤 성과를 만들었는가?</div>
-          <p>시민과 임직원은 앱으로 참여하고, 기관은 관리자 화면과 보고서로 활동과 성과를 관리합니다.</p></div>
-        </div>
+        <span class="no">03</span>
+        <h3>ESG·CSR 실행·<br>성과관리 플랫폼</h3>
+        <p class="bq">누가 무엇을 했고, 어떤 성과를 만들었는가?</p>
+        <div class="tags"><span>볼런트립</span><span>기관 맞춤형 플랫폼</span><span>임팩트 리포팅</span></div>
       </div>
-      <div class="area">
+      <div class="biz">
         <div class="ph"><img src="assets/ph-data.jpg" alt="워크숍장에 세워 둔 설문판에 참여자들이 붙인 빨간 스티커가 모여 있다." style="object-position:50% 80%"></div>
-        <div class="tx">
-          <div class="l"><span class="no">04</span>
-          <h3>사회문제<br>데이터·AI 솔루션</h3>
-          <div class="tags"><span>참여형 데이터 수집·생성</span><span>지역 이슈 진단</span><span>AI 에이전트</span></div></div>
-          <div class="r"><div class="q">지역사회에 무슨 일이 일어나고 있으며, 어떤 대응이 필요한가?</div>
-          <p>참여 활동에서 모은 데이터로 지역의 이슈를 읽습니다. 지역 이슈 진단과 AI 에이전트는 개발 중입니다.</p></div>
-        </div>
+        <span class="no">04</span>
+        <h3>사회문제<br>데이터·AI 솔루션</h3>
+        <p class="bq">지역사회에 무슨 일이 일어나고 있으며, 어떤 대응이 필요한가?</p>
+        <div class="tags"><span>참여형 데이터 수집·생성</span><span>지역 이슈 진단</span><span>AI 에이전트</span></div>
       </div>
     </div>
     <div class="foot"><span>스테디윈스 주식회사</span><span>2</span></div>
@@ -295,8 +342,8 @@ body.impose .page{page-break-after:auto;break-after:auto;flex:none}
   <div class="pad">
     <div class="run"><span>회사소개서 2027</span><span lang="en">Leave it better.</span></div>
     <div class="head big">
-      <div><span class="kicker">제품·서비스</span></div>
-      <h2>사업영역의 일을 하나로 잇는<br>우리의 기술입니다.</h2>
+      <div><span class="kicker">서비스 라인</span></div>
+      <h2>현장의 참여부터 성과 데이터까지,<br>직접 만든 서비스로 연결합니다.</h2>
     </div>
     <div class="bento">
       <div class="box l">
@@ -325,6 +372,16 @@ body.impose .page{page-break-after:auto;break-after:auto;flex:none}
     </div>
     <p class="note" style="margin-top:2.4mm">상태는 2026년 11월 기준입니다. 점선 표시는 아직 출시하지 않은 서비스입니다.</p>
 
+    <div class="sec" style="margin-top:8mm">특장점</div>
+    <div class="feats">
+      <div><b>조직을 늘리지 않고 도입</b><p>전담 조직을 따로 두지 않고 구독으로 시작합니다.</p></div>
+      <div><b>검증된 참여 데이터</b><p>위치, 사진, 본인 인증으로 실제 활동을 확인합니다.</p></div>
+      <div><b>자동 리포트</b><p>대시보드와 보고서(PDF, 엑셀)를 자동으로 만듭니다.</p></div>
+      <div><b>평가 기준에 맞춘 증빙</b><p>경영평가, GRI, SDGs 항목에 맞춰 결과를 정리합니다.</p></div>
+      <div><b>봉사시간 연계</b><p>참여 활동이 1365 자원봉사포털 봉사시간으로 인정됩니다.</p></div>
+      <div><b>기관이 직접 만드는 캠페인</b><p>템플릿으로 캠페인을 만들고 관리자 화면에서 운영합니다.</p></div>
+    </div>
+
     <div class="sec" style="margin-top:8mm">서비스가 일하는 순서</div>
     <div class="steps">
       <div class="step"><i>01</i><b>기획</b><p>지역 자료와 기관의 사업을 함께 읽고 시민 참여 캠페인으로 설계합니다.</p></div>
@@ -332,11 +389,6 @@ body.impose .page{page-break-after:auto;break-after:auto;flex:none}
       <div class="step"><i>03</i><b>운영</b><p>기관은 관리자 화면에서 참여자, 캠페인, 리워드를 직접 관리합니다.</p></div>
       <div class="step"><i>04</i><b>기록</b><p>검증한 참여 데이터를 대시보드와 보고서(PDF, 엑셀)로 제공합니다.</p></div>
       <div class="step"><i>05</i><b>확산</b><p>기관 전용 웹사이트에서 활동과 성과를 공개합니다.</p></div>
-    </div>
-
-    <div class="shot">
-      <div class="ph"><img src="assets/ph-admin.jpg" alt="볼런트립 관리자 화면. 캠페인 참여 현황과 달성률이 보인다."></div>
-      <p><b>관리자 화면</b>캠페인별 참여 현황과 달성률을 실시간으로 확인합니다. 경영평가, GRI, SDGs 항목에 맞춰 결과를 정리합니다.</p>
     </div>
     <div class="foot"><span>스테디윈스 주식회사</span><span>3</span></div>
   </div>
@@ -347,7 +399,7 @@ body.impose .page{page-break-after:auto;break-after:auto;flex:none}
   <div class="pad">
     <div class="run"><img src="assets/steadywins-ko.svg" alt="스테디윈스"><span>회사소개서 2027</span></div>
     <div class="head big">
-      <div><span class="kicker">사례</span></div>
+      <div><span class="kicker">사례와 데이터</span></div>
       <h2>앱 출시 이후,<br>기록으로 남은 참여입니다.</h2>
     </div>
     <div class="stats">
@@ -440,28 +492,15 @@ body.impose .page{page-break-after:auto;break-after:auto;flex:none}
   </div>
 </section>
 
-<!-- 6. 뒷표지: 미션·비전·하고 싶은 말 -->
+<!-- 6. 뒷표지 -->
 <section class="page back" data-p="6">
+  <div class="center">
+    <img src="assets/steadywins-ko-inc.svg" alt="스테디윈스 STEADYWINS INC">
+    <p class="slogan" lang="en">Leave it better.</p>
+  </div>
   <div class="pad">
-    <div><span class="lab">비전</span></div>
-    <p class="vision">재밌는 도시, 따뜻한 사회,<br>차가운 지구 만들기.</p>
-
-    <div style="margin-top:11mm"><span class="lab">미션</span></div>
-    <div class="mission" style="margin-top:3mm">
-      <div><i>기회</i><span>누구나 지역의 변화에 참여할 기회를 만듭니다.</span></div>
-      <div><i>연결</i><span>지역과 사람을 참여로 잇습니다.</span></div>
-      <div><i>증명</i><span>그 참여의 가치를 데이터로 증명합니다.</span></div>
-    </div>
-
-    <div style="margin-top:11mm"><span class="lab">하고 싶은 말</span></div>
-    <p class="msg">지역 문제 해결의 성공 사례엔 언제나 시민이 있습니다. 우리는 누군가의 자발적인 참여 기회를 만들고, 모두의 문제를 데이터로 풀어 갑니다.</p>
-    <p class="msg-by">오규림 대표</p>
-
     <div class="bottom">
-      <div>
-        <img class="logo" src="assets/steadywins-ko-inc.svg" alt="스테디윈스 STEADYWINS INC">
-        <p class="copy">© 2026 STEADYWINS Inc.</p>
-      </div>
+      <p class="copy">© 2026 STEADYWINS Inc.</p>
       <p class="web">steadywins.kr<br>partner@steadywins.kr</p>
     </div>
   </div>
