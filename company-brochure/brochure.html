@@ -268,7 +268,7 @@ img{display:block}
 .tl li i{font-style:normal;font-weight:700}
 /* 5쪽: 인증서 사진 */
 .certs{grid-template-columns:repeat(6,1fr);gap:3mm;margin-top:3.5mm}
-.cert .ci{height:38mm;border:.25mm solid var(--line);background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.cert .ci{height:34mm;border:.25mm solid var(--line);background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden}
 .cert .ci img{max-width:100%;max-height:100%}
 .cert span{font-size:7pt;line-height:1.35;margin-top:1.6mm}
 .cert span small{display:block;font-size:6.2pt;font-weight:500;color:var(--muted);margin-top:.4mm}
@@ -292,6 +292,35 @@ img{display:block}
 .tline::after{border:0;right:0;top:7.1mm;width:3.2mm;height:3.2mm;background:url("assets/steadywins-spark.svg") center/contain no-repeat}
 .tl .dot{width:2.4mm;height:2.4mm;border:.25mm solid #8a8a8e;top:.5mm}
 .tl.now .dot{background:#fff;border-color:var(--orange);border-width:.5mm}
+
+
+/* 정리: 장식을 줄이고 위계를 키운다 */
+.head.big h2{font-size:28pt;font-weight:300;line-height:1.26;letter-spacing:-.02em}
+.head{margin-top:12mm}
+.sec{font-size:8.6pt;font-weight:600;gap:0;border-top:.25mm solid var(--line);padding-top:3mm}
+.sec::before{display:none}
+.sub::before{display:none}
+.ev{background:none;border-left:0;border-top:.35mm solid var(--ink);padding:3.4mm 0 0}
+.ev .num{font-size:36pt}
+.why{gap:8mm}
+.say{font-size:12pt;font-weight:400;margin-top:5mm}
+.tags{gap:0}
+.tags span,.biz .tags span{background:none;padding:0;border-radius:0;color:var(--muted);font-size:7pt}
+.tags span+span::before{content:"·";margin:0 1.2mm}
+.chips{gap:0}
+.chips span{border:0;padding:0;border-radius:0;color:var(--muted);font-size:7.8pt}
+.chips span+span::before{content:"·";margin:0 1.6mm}
+.biz .ph,.case .ph,.area .ph,.shot .ph{border-radius:1mm}
+.box{border-radius:2mm}
+.box.m .url{border-radius:1mm}
+.feats,.more,.co{border-top:0}
+.feats{margin-top:1mm}.more{margin-top:5mm;border-top:.25mm solid var(--line)}.co{margin-top:1mm}
+.stats{border-top:.35mm solid var(--ink)}
+.stat{padding:4mm 3mm 4mm 0}
+.stat .num{font-size:34pt}
+.run .pg{border-bottom:0;padding-bottom:0;color:var(--muted);font-weight:500}
+.cert .ci{border-color:var(--line)}
+.tl .yr span{border:0;padding:0;color:var(--muted);font-weight:500;vertical-align:1mm}
 
 /* 접지 대지(인쇄용 터잡기) */
 body.impose{background:#fff}
@@ -324,7 +353,6 @@ body.impose .page{page-break-after:auto;break-after:auto;flex:none}
   <div class="pad">
     <div class="run"><img src="assets/steadywins-ko.svg" alt="스테디윈스"><span class="pg">비전</span></div>
     <div class="head big">
-      <svg class="orn" viewBox="0 0 200 60" aria-hidden="true"><path d="M2 52 C 50 54, 78 18, 120 22 S 170 34, 188 10"/><circle cx="38" cy="48.6" r="1.7"/><circle cx="84" cy="26.5" r="1.7"/><circle cx="133" cy="23.6" r="1.7"/><image href="assets/steadywins-spark.svg" x="185" y="3" width="10" height="10"/></svg>
       <h2>재밌는 도시, 따뜻한 사회,<br>차가운 지구 만들기.</h2>
     </div>
 
@@ -390,7 +418,6 @@ body.impose .page{page-break-after:auto;break-after:auto;flex:none}
   <div class="pad">
     <div class="run"><img src="assets/steadywins-ko.svg" alt="스테디윈스"><span class="pg">서비스 라인</span></div>
     <div class="head big">
-      <svg class="orn" viewBox="0 0 200 60" aria-hidden="true"><path d="M2 14 C 44 8, 70 44, 112 40 S 168 16, 188 30"/><circle cx="40" cy="19.3" r="1.7"/><circle cx="92" cy="41.6" r="1.7"/><circle cx="147" cy="29.5" r="1.7"/><image href="assets/steadywins-spark.svg" x="185" y="26" width="10" height="10"/></svg>
       <h2>참여부터 성과 데이터까지,<br>자체 개발 서비스</h2>
     </div>
     <div class="bento">
@@ -447,14 +474,13 @@ body.impose .page{page-break-after:auto;break-after:auto;flex:none}
   <div class="pad">
     <div class="run"><img src="assets/steadywins-ko.svg" alt="스테디윈스"><span class="pg">주요 실적 및 사례</span></div>
     <div class="head big">
-      <svg class="orn" viewBox="0 0 200 60" aria-hidden="true"><path d="M2 44 C 36 20, 76 22, 104 36 S 156 52, 188 16"/><circle cx="30" cy="28.5" r="1.7"/><circle cx="86" cy="27.8" r="1.7"/><circle cx="140" cy="45" r="1.7"/><image href="assets/steadywins-spark.svg" x="185" y="9" width="10" height="10"/></svg>
       <h2>앱 출시 이후,<br>기록으로 남은 참여입니다.</h2>
     </div>
     <div class="stats">
-      <div class="stat"><span class="badge">실적</span><div class="num" style="margin-top:2mm">26,505<span>회</span></div><div class="lab">시민·임직원 참여</div></div>
-      <div class="stat"><span class="badge">실적</span><div class="num" style="margin-top:2mm">18,252<span>시간</span></div><div class="lab">봉사 참여 시간</div></div>
-      <div class="stat"><span class="badge">실적</span><div class="num" style="margin-top:2mm">226,266<span>건</span></div><div class="lab">캠페인 미션 완료</div></div>
-      <div class="stat"><span class="badge">실적</span><div class="num" style="margin-top:2mm">94.2<span>%</span></div><div class="lab">활동 완수율</div></div>
+      <div class="stat"><div class="num">26,505<span>회</span></div><div class="lab">시민·임직원 참여</div></div>
+      <div class="stat"><div class="num">18,252<span>시간</span></div><div class="lab">봉사 참여 시간</div></div>
+      <div class="stat"><div class="num">226,266<span>건</span></div><div class="lab">캠페인 미션 완료</div></div>
+      <div class="stat"><div class="num">94.2<span>%</span></div><div class="lab">활동 완수율</div></div>
     </div>
     <p class="note" style="margin-top:2mm">근거: 볼런트립 관리자 집계, 2025년 7월 20일(앱 출시일)부터 2026년 11월 10일까지. 공공기관 7곳에서 운영 중이며 경기도 31개 시·군에 적용 계약을 맺었습니다.</p>
 
@@ -497,7 +523,6 @@ body.impose .page{page-break-after:auto;break-after:auto;flex:none}
   <div class="pad">
     <div class="run"><img src="assets/steadywins-ko.svg" alt="스테디윈스"><span class="pg">연혁 및 인증</span></div>
     <div class="head big">
-      <svg class="orn" viewBox="0 0 200 60" aria-hidden="true"><path d="M2 30 C 40 50, 70 46, 100 30 S 150 8, 188 24"/><circle cx="36" cy="42.5" r="1.7"/><circle cx="100" cy="30" r="1.7"/><circle cx="150" cy="15.8" r="1.7"/><image href="assets/steadywins-spark.svg" x="185" y="20" width="10" height="10"/></svg>
       <h2>남의 ESG를 돕기 전에,<br>우리부터 검증받았습니다.</h2>
     </div>
 
