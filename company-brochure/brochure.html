@@ -41,18 +41,18 @@ p{text-wrap:pretty}
 .badge{display:inline-block;font-size:6.8pt;font-weight:600;line-height:1;padding:1.1mm 2mm;border:.25mm solid var(--ink);border-radius:10mm}
 
 /* 1 표지 */
-.cover{background:var(--black) url("assets/steadywins-aurora-dusk.jpg") center/cover no-repeat;color:#fff}
+.cover{background:#fff url("assets/steadywins-aurora-dusk-light.jpg") center/cover no-repeat;color:var(--ink)}
 .cover .pad{inset:18mm 18mm 16mm 18mm}
 .cover .top{display:flex;justify-content:space-between;align-items:flex-start}
 .cover .top img{height:9mm}
-.cover .top span{font-size:8.4pt;font-weight:500;color:#d9d9d9;text-align:right;line-height:1.5}
+.cover .top span{font-size:8.4pt;font-weight:500;color:var(--muted);text-align:right;line-height:1.5}
 .cover h1{font-size:42pt;font-weight:300;line-height:1.24;letter-spacing:-.02em;margin-top:38mm}
-.cover .sub{font-size:11.4pt;line-height:1.7;margin-top:8mm;max-width:118mm;color:#f0f0f0}
+.cover .sub{font-size:11.4pt;line-height:1.7;margin-top:8mm;max-width:118mm}
 .cover .bottom{margin-top:auto;display:flex;justify-content:space-between;align-items:flex-end}
 .cover .tag{font-size:13pt;font-weight:500;letter-spacing:.005em}
-.cover .tag small{display:block;font-size:8.2pt;font-weight:400;color:var(--d-muted);margin-top:1.2mm}
-.cover .doc{font-size:8.4pt;font-weight:500;color:var(--d-muted);text-align:right;line-height:1.5}
-.cover .doc b{display:block;color:#fff;font-size:10.5pt;font-weight:600}
+.cover .tag small{display:block;font-size:8.2pt;font-weight:400;color:var(--muted);margin-top:1.2mm}
+.cover .doc{font-size:8.4pt;font-weight:500;color:var(--muted);text-align:right;line-height:1.5}
+.cover .doc b{display:block;color:var(--ink);font-size:10.5pt;font-weight:600}
 
 /* 2 소개 */
 .why{display:grid;grid-template-columns:1fr 1fr;gap:5mm;margin-top:4mm}
@@ -102,23 +102,19 @@ p{text-wrap:pretty}
 .more b{font-weight:600}
 
 /* 4 뒷표지 */
-.back{background:var(--black);color:#fff}
-.back .run,.back .foot{color:var(--d-muted)}
-.back .foot{border-top-color:var(--d-line)}
 .back .vision{font-size:27pt;font-weight:300;line-height:1.36;letter-spacing:-.015em;margin-top:16mm}
-.back .vsub{font-size:9.4pt;color:var(--d-muted);margin-top:3mm;font-weight:500}
+.back .vsub{font-size:9.4pt;color:var(--muted);margin-top:3mm;font-weight:500}
 .cols{display:grid;grid-template-columns:1.18fr 1fr;gap:10mm;margin-top:14mm}
-.back .sec{color:#fff}
-.hist{margin-top:3mm;border-top:.3mm solid #8f8f8f}
-.hist div{display:grid;grid-template-columns:16mm 1fr;padding:2.3mm 0;border-bottom:.25mm solid var(--d-line);font-size:8.4pt;line-height:1.5}
-.hist i{font-style:normal;font-weight:600;color:var(--orange)}
+.hist{margin-top:3mm;border-top:.35mm solid var(--ink)}
+.hist div{display:grid;grid-template-columns:16mm 1fr;padding:2.3mm 0;border-bottom:.25mm solid var(--line);font-size:8.4pt;line-height:1.5}
+.hist i{font-style:normal;font-weight:700}
 .chips{margin-top:3mm;display:flex;flex-wrap:wrap;gap:1.6mm}
-.chips span{font-size:8pt;font-weight:500;padding:1.3mm 2.6mm;border:.25mm solid #8f8f8f;border-radius:10mm;line-height:1.2}
-.info{margin-top:3mm;border-top:.3mm solid #8f8f8f}
-.info div{display:grid;grid-template-columns:17mm 1fr;padding:2.3mm 0;border-bottom:.25mm solid var(--d-line);font-size:8.4pt;line-height:1.5}
-.info i{font-style:normal;color:var(--d-muted);font-weight:500}
-.todo{color:var(--orange);font-weight:600}
-.contact{margin-top:auto;background:var(--orange);color:var(--black);padding:5.5mm 7mm;display:flex;justify-content:space-between;align-items:center;gap:8mm}
+.chips span{font-size:8pt;font-weight:500;padding:1.3mm 2.6mm;border:.25mm solid #8a8a8e;border-radius:10mm;line-height:1.2}
+.info{margin-top:3mm;border-top:.35mm solid var(--ink)}
+.info div{display:grid;grid-template-columns:17mm 1fr;padding:2.3mm 0;border-bottom:.25mm solid var(--line);font-size:8.4pt;line-height:1.5}
+.info i{font-style:normal;color:var(--muted);font-weight:500}
+.todo{font-weight:600;border-bottom:.5mm solid var(--orange);justify-self:start}
+.contact{margin-top:auto;background:var(--raised);border-top:.7mm solid var(--orange);padding:5.5mm 7mm;display:flex;justify-content:space-between;align-items:center;gap:8mm}
 .contact h3{font-size:14.5pt;font-weight:600;line-height:1.35}
 .contact p{font-size:8.8pt;font-weight:500;line-height:1.6;text-align:right}
 .back .logo{height:8mm;width:auto;display:block;margin-top:6mm;align-self:flex-start}
@@ -138,7 +134,7 @@ body.impose .page{page-break-after:auto;break-after:auto;flex:none}
 <section class="page cover" data-p="1">
   <div class="pad">
     <div class="top">
-      <img src="assets/steadywins-ko-reverse.svg" alt="스테디윈스">
+      <img src="assets/steadywins-ko.svg" alt="스테디윈스">
       <span>회사소개서<br>2027</span>
     </div>
     <h1>지역의 문제를,<br>시민의 참여로.</h1>
@@ -310,7 +306,7 @@ body.impose .page{page-break-after:auto;break-after:auto;flex:none}
       <h3>우리 지역의 문제도<br>시민과 함께 풀 수 있습니다.</h3>
       <p>협업 문의<br><b>[문의 이메일 확인 필요]</b></p>
     </div>
-    <img class="logo" src="assets/steadywins-ko-inc-reverse.svg" alt="스테디윈스 STEADYWINS INC">
+    <img class="logo" src="assets/steadywins-ko-inc.svg" alt="스테디윈스 STEADYWINS INC">
     <div class="foot"><span>수치와 연혁은 2026년 11월 기준입니다.</span><span>© 2026 STEADYWINS Inc.</span></div>
   </div>
 </section>
