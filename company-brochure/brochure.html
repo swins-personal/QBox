@@ -41,7 +41,9 @@ p{text-wrap:pretty}
 .badge{display:inline-block;font-size:6.8pt;font-weight:600;line-height:1;padding:1.1mm 2mm;border:.25mm solid var(--ink);border-radius:10mm}
 
 /* 1 표지 */
-.cover{background:#fff url("assets/steadywins-aurora-dusk-light.jpg") center/cover no-repeat;color:var(--ink)}
+.cover,.back{background:#fff url("assets/steadywins-aurora-dusk-light.jpg") no-repeat;background-size:528mm 297mm;color:var(--ink)}
+.cover{background-position:-264mm 0}
+.back{background-position:-54mm 0}
 .cover .pad{inset:18mm 18mm 16mm 18mm}
 .cover .top{display:flex;justify-content:space-between;align-items:flex-start}
 .cover .top img{height:9mm}
@@ -72,7 +74,7 @@ p{text-wrap:pretty}
 .vt p{font-size:8.8pt;line-height:1.6;color:#ececec}
 
 .areas{margin-top:7mm;border-top:.35mm solid var(--ink)}
-.area{display:grid;grid-template-columns:9mm 68mm 1fr;column-gap:0;align-items:start;padding:4.2mm 0;border-bottom:.25mm solid var(--line)}
+.area{display:grid;grid-template-columns:9mm 68mm 1fr;column-gap:0;align-items:start;padding:3.7mm 0;border-bottom:.25mm solid var(--line)}
 .area i{font-style:normal;font-size:8pt;font-weight:600;color:var(--muted);padding-top:.7mm}
 .area h3{font-size:11pt;font-weight:600;line-height:1.4;padding-right:6mm}
 .tags{display:flex;flex-wrap:wrap;gap:1.2mm;margin-top:2.2mm;padding-right:5mm}
@@ -102,23 +104,25 @@ p{text-wrap:pretty}
 .more b{font-weight:600}
 
 /* 4 뒷표지 */
-.back .vision{font-size:27pt;font-weight:300;line-height:1.36;letter-spacing:-.015em;margin-top:16mm}
+.back .pad{inset:18mm 18mm 16mm 18mm}
+.back .vision{font-size:27pt;font-weight:300;line-height:1.36;letter-spacing:-.015em;margin-top:47mm}
 .back .vsub{font-size:9.4pt;color:var(--muted);margin-top:3mm;font-weight:500}
-.cols{display:grid;grid-template-columns:1.18fr 1fr;gap:10mm;margin-top:14mm}
-.hist{margin-top:3mm;border-top:.35mm solid var(--ink)}
-.hist div{display:grid;grid-template-columns:16mm 1fr;padding:2.3mm 0;border-bottom:.25mm solid var(--line);font-size:8.4pt;line-height:1.5}
-.hist i{font-style:normal;font-weight:700}
-.chips{margin-top:3mm;display:flex;flex-wrap:wrap;gap:1.6mm}
-.chips span{font-size:8pt;font-weight:500;padding:1.3mm 2.6mm;border:.25mm solid #8a8a8e;border-radius:10mm;line-height:1.2}
-.info{margin-top:3mm;border-top:.35mm solid var(--ink)}
-.info div{display:grid;grid-template-columns:17mm 1fr;padding:2.3mm 0;border-bottom:.25mm solid var(--line);font-size:8.4pt;line-height:1.5}
+.back .bottom{margin-top:auto}
+.back .logo{height:7mm;width:auto;display:block}
+.info{margin-top:14mm;display:grid;grid-template-columns:1fr 1fr;column-gap:10mm;border-top:.35mm solid var(--ink)}
+.info div{display:grid;grid-template-columns:17mm 1fr;padding:1.9mm 0;border-bottom:.25mm solid #c9c9cc;font-size:8.2pt;line-height:1.5}
 .info i{font-style:normal;color:var(--muted);font-weight:500}
 .todo{font-weight:600;border-bottom:.5mm solid var(--orange);justify-self:start}
-.contact{margin-top:auto;background:var(--raised);border-top:.7mm solid var(--orange);padding:5.5mm 7mm;display:flex;justify-content:space-between;align-items:center;gap:8mm}
-.contact h3{font-size:14.5pt;font-weight:600;line-height:1.35}
-.contact p{font-size:8.8pt;font-weight:500;line-height:1.6;text-align:right}
-.back .logo{height:8mm;width:auto;display:block;margin-top:6mm;align-self:flex-start}
-.back .foot{margin-top:5mm}
+.back .copy{margin-top:2.5mm;font-size:7.2pt;font-weight:500;color:var(--muted)}
+
+/* 2 연혁·인증 */
+.hist{margin-top:3mm;display:grid;grid-template-columns:1fr 1fr;column-gap:8mm;border-top:.35mm solid var(--ink)}
+.hist div{display:grid;grid-template-columns:15mm 1fr;padding:1.9mm 0;border-bottom:.25mm solid var(--line);font-size:8.3pt;line-height:1.5}
+.hist i{font-style:normal;font-weight:700}
+.certs{margin-top:4mm;display:grid;grid-template-columns:22mm 1fr;align-items:center}
+.certs b{font-size:8.6pt;font-weight:600}
+.chips{display:flex;flex-wrap:wrap;gap:1.6mm}
+.chips span{font-size:7.8pt;font-weight:500;padding:1.2mm 2.5mm;border:.25mm solid #8a8a8e;border-radius:10mm;line-height:1.2}
 
 /* A3 대지(인쇄용 터잡기) */
 body.impose{background:#fff}
@@ -190,18 +194,21 @@ body.impose .page{page-break-after:auto;break-after:auto;flex:none}
     </div>
     <p class="note" style="margin-top:2.4mm">04의 지역 이슈 분석과 AI 에이전트는 개발 중입니다(2026년 11월 기준). 참여형 데이터 수집은 볼런트립에서 운영 중입니다.</p>
 
-    <div class="sec" style="margin-top:8mm">이 일이 필요한 이유</div>
-    <div class="why">
-      <div class="ev">
-        <div class="num">3.6%</div>
-        <div class="lab">지역 문제 해결 활동에 실제로 참여한 경기도민.<br>참여할 의향이 있다는 응답은 40.3%입니다.</div>
-        <div class="src">출처: 2024 경기도 사회조사. 참여율과 참여 의향은 모집단이 다른 지표입니다.</div>
-      </div>
-      <div class="ev">
-        <div class="num">7.5%</div>
-        <div class="lab">기업 사회공헌 지표 가운데 성과까지 측정하는 지표.<br>76.7%는 참여자 수 같은 단순 집계입니다.</div>
-        <div class="src">출처: 트리플라잇, 「데이터로 보는 100대 기업 사회공헌 이슈&amp;임팩트」(2024).</div>
-      </div>
+    <div class="sec" style="margin-top:9mm">걸어온 길</div>
+    <div class="hist">
+      <div><i>2022.04</i><span>스테디윈스 설립</span></div>
+      <div><i>2025.09</i><span>화성시장상(정책 유공)</span></div>
+      <div><i>2023.12</i><span>사회적기업가 육성사업 최우수상</span></div>
+      <div><i>2025.10</i><span>특허 출원(ESG 임팩트 데이터 자동 산출 방법 및 시스템)</span></div>
+      <div><i>2024.07</i><span>볼런트립 웹 서비스 출시 · 경기도 ESG 비즈니스 네트워크 운영사</span></div>
+      <div><i>2025.11</i><span>GKL ESG 온 6기 우수기업 · 경기관광공사 IR 피칭대회 최우수상</span></div>
+      <div><i>2024.11</i><span>예비사회적기업 지정 · ISO 14001 인증</span></div>
+      <div><i>2026.02</i><span>경기도 31개 시·군 무장애 관광 캠페인 · 화성시 사회적경제 우수기업</span></div>
+      <div><i>2025.07</i><span>볼런트립 앱 정식 출시 · 경기도 ESG 해커톤 우수아이디어상</span></div>
+      <div><i>2026.04</i><span>소셜벤처 인증</span></div>
+    </div>
+    <div class="certs"><b>인증과 자격</b>
+      <div class="chips"><span>예비사회적기업</span><span>소셜벤처</span><span>벤처기업</span><span>여성기업</span><span>ISO 14001</span><span>경기도 AI 기업</span><span>기업부설연구소</span></div>
     </div>
 
     <div class="foot"><span>스테디윈스 주식회사</span><span>2</span></div>
@@ -261,53 +268,24 @@ body.impose .page{page-break-after:auto;break-after:auto;flex:none}
 <!-- 4. 뒷표지 -->
 <section class="page back" data-p="4">
   <div class="pad">
-    <div class="run"><span>회사소개서 2027</span><span>4</span></div>
-
     <p class="vision">재밌는 도시, 따뜻한 사회,<br>차가운 지구 만들기.</p>
     <p class="vsub">스테디윈스의 비전입니다.</p>
 
-    <div class="cols">
-      <div>
-        <div class="sec">걸어온 길</div>
-        <div class="hist">
-          <div><i>2022.04</i><span>스테디윈스 설립</span></div>
-          <div><i>2023.12</i><span>사회적기업가 육성사업 최우수상</span></div>
-          <div><i>2024.07</i><span>볼런트립 웹 서비스 출시 · 경기도 ESG 비즈니스 네트워크 운영사</span></div>
-          <div><i>2024.11</i><span>예비사회적기업 지정 · ISO 14001 인증</span></div>
-          <div><i>2025.07</i><span>볼런트립 앱 정식 출시 · 경기도 ESG 해커톤 우수아이디어상</span></div>
-          <div><i>2025.09</i><span>화성시장상(정책 유공)</span></div>
-          <div><i>2025.10</i><span>특허 출원(ESG 임팩트 데이터 자동 산출 방법 및 시스템)</span></div>
-          <div><i>2025.11</i><span>GKL ESG 온 6기 우수기업 · 경기관광공사 IR 피칭대회 최우수상</span></div>
-          <div><i>2026.02</i><span>경기도 31개 시·군 무장애 관광 캠페인 · 화성시 사회적경제 우수기업</span></div>
-          <div><i>2026.04</i><span>소셜벤처 인증</span></div>
-        </div>
+    <div class="info">
+      <div><i>회사명</i><span>스테디윈스 주식회사</span></div>
+      <div><i>주소</i><span class="todo">[주소 확인 필요]</span></div>
+      <div><i>대표</i><span>오규림</span></div>
+      <div><i>전화</i><span class="todo">[전화번호 확인 필요]</span></div>
+      <div><i>설립</i><span>2022년 4월</span></div>
+      <div><i>웹</i><span class="todo">[홈페이지 주소 확인 필요]</span></div>
+      <div><i>협업 문의</i><span class="todo">[문의 이메일 확인 필요]</span></div>
+      <div><i>기준</i><span>수치와 연혁은 2026년 11월 기준</span></div>
       </div>
-      <div>
-        <div class="sec">인증과 자격</div>
-        <div class="chips">
-          <span>예비사회적기업</span><span>소셜벤처</span><span>벤처기업</span><span>여성기업</span>
-          <span>ISO 14001</span><span>경기도 AI 기업</span><span>기업부설연구소</span>
-        </div>
 
-        <div class="sec" style="margin-top:8mm">회사 개요</div>
-        <div class="info">
-          <div><i>회사명</i><span>스테디윈스 주식회사 (STEADYWINS Inc.)</span></div>
-          <div><i>대표</i><span>오규림</span></div>
-          <div><i>설립</i><span>2022년 4월</span></div>
-          <div><i>사업영역</i><span>지역사회 조사·연구 및 참여형 프로젝트<br>관광 콘텐츠·체험 프로그램 개발·운영<br>ESG·CSR 활동 실행·성과관리 플랫폼<br>사회문제 데이터 분석·AI 솔루션 개발</span></div>
-          <div><i>주소</i><span class="todo">[주소 확인 필요]</span></div>
-          <div><i>전화</i><span class="todo">[전화번호 확인 필요]</span></div>
-          <div><i>웹</i><span class="todo">[홈페이지 주소 확인 필요]</span></div>
-        </div>
-      </div>
+    <div class="bottom">
+      <img class="logo" src="assets/steadywins-ko-inc.svg" alt="스테디윈스 STEADYWINS INC">
+      <p class="copy">© 2026 STEADYWINS Inc.</p>
     </div>
-
-    <div class="contact">
-      <h3>우리 지역의 문제도<br>시민과 함께 풀 수 있습니다.</h3>
-      <p>협업 문의<br><b>[문의 이메일 확인 필요]</b></p>
-    </div>
-    <img class="logo" src="assets/steadywins-ko-inc.svg" alt="스테디윈스 STEADYWINS INC">
-    <div class="foot"><span>수치와 연혁은 2026년 11월 기준입니다.</span><span>© 2026 STEADYWINS Inc.</span></div>
   </div>
 </section>
 
