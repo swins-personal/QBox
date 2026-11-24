@@ -322,6 +322,49 @@ img{display:block}
 .cert .ci{border-color:var(--line)}
 .tl .yr span{border:0;padding:0;color:var(--muted);font-weight:500;vertical-align:1mm}
 
+
+/* 2쪽 사회문제 */
+.plead{font-size:12pt;line-height:1.6;margin-top:4mm;max-width:158mm}
+.why{grid-template-columns:repeat(3,1fr);gap:7mm;margin-top:7mm}
+.ev .num{font-size:38pt}
+.ev .num span{font-size:12pt;font-weight:500;letter-spacing:0;margin-left:1mm}
+.ev .lab{font-size:9.4pt;line-height:1.5;margin-top:2mm}
+.ev .src{font-size:7pt;line-height:1.55;margin-top:2mm}
+.biz .ph{height:50mm}
+/* 3쪽 서비스 */
+.bento{grid-auto-rows:54mm}
+.box ul{list-style:none;margin-top:2.6mm}
+.box li{position:relative;padding-left:3mm;font-size:8pt;line-height:1.5;margin-top:1mm}
+.box li::before{content:"";position:absolute;left:0;top:1.9mm;width:1.2mm;height:.25mm;background:var(--ink)}
+.box.l p{max-width:41mm;margin-top:3mm;font-size:8.8pt}
+.box.l ul{max-width:41mm}
+.box.l .phone{height:74mm;width:30mm;right:5mm;border-width:1.2mm}
+.box.m p{max-width:none}
+.admin{margin-top:4mm;display:grid;grid-template-columns:1fr 52mm;gap:7mm;align-items:start}
+.admin .ph{height:62mm;border:.25mm solid var(--line);border-radius:1mm}
+.admin .ph img{object-position:top left}
+.adtx div+div{margin-top:5mm}
+.adtx b{display:block;font-size:10pt;font-weight:600}
+.adtx p{font-size:8.6pt;line-height:1.6;margin-top:1mm}
+/* 5쪽 연혁: 항목 사이 선을 없애고 2026을 강조 */
+.tl ul{border-top:0;margin-top:2.4mm}
+.tl li{border-bottom:0;padding:1.05mm 0;font-size:8pt;grid-template-columns:8mm 1fr}
+.tl li i{font-weight:500;color:var(--muted)}
+.tl .yr{color:var(--muted)}
+.tl.now .yr{color:var(--ink);font-weight:600;font-size:21pt}
+.tl.now .yr span{color:var(--ink);font-weight:600;font-size:7.4pt;margin-left:2mm;padding:.9mm 2mm;background:var(--orange);border-radius:10mm;vertical-align:2mm}
+.tl.now .dot{background:var(--orange);border-color:var(--orange)}
+.tl.now li{font-weight:500}
+.tl.now li i{color:var(--ink);font-weight:700}
+.tline{grid-template-columns:.8fr 1fr 1.15fr 1.3fr}
+/* 5쪽 아래: 회사 정보와 문의 */
+.contact{margin-top:9mm;display:grid;grid-template-columns:1.15fr 1fr;gap:10mm}
+.contact dl{display:grid;grid-template-columns:15mm 1fr;row-gap:1.6mm;margin-top:3mm;font-size:8.4pt;line-height:1.5}
+.contact dt{color:var(--muted);font-weight:500}
+.cask .ask{font-size:12pt;line-height:1.5;margin-top:3mm}
+.cask .mail{font-size:15pt;font-weight:500;letter-spacing:-.01em;margin-top:3.5mm;display:inline-block;padding-bottom:1mm;border-bottom:.6mm solid var(--orange)}
+.cask .site{font-size:9pt;font-weight:500;color:var(--muted);margin-top:2mm}
+
 /* 접지 대지(인쇄용 터잡기) */
 body.impose{background:#fff}
 body.impose .sheet{width:630mm;height:297mm;display:flex;page-break-after:always;break-after:page}
@@ -356,29 +399,27 @@ body.impose .page{page-break-after:auto;break-after:auto;flex:none}
       <h2>재밌는 도시, 따뜻한 사회,<br>차가운 지구 만들기.</h2>
     </div>
 
-    <div class="sec" style="margin-top:9mm">우리가 보는 사회문제</div>
+    <div class="sec" style="margin-top:10mm">우리가 보는 사회문제</div>
+    <p class="plead">작은 지역 문제가 모여 큰 비용이 됩니다. 해마다 큰 재원이 들어가지만, 꾸준히 이어지는 실천을 만들기는 어렵습니다. 대부분의 문제는 시민이 함께할 때 바뀝니다.</p>
     <div class="why">
       <div class="ev">
-        <div class="num">3.6%</div>
-        <div class="lab">지역 문제 해결 활동에 실제로 참여한 경기도민.<br>참여할 의향이 있다는 응답은 40.3%입니다.</div>
-        <div class="src">출처: 2024 경기도 사회조사. 참여율과 참여 의향은 모집단이 다른 지표입니다.</div>
+        <div class="num">4.7<span>조 원</span></div>
+        <div class="lab">지역 사회문제 해결에 해마다 쓰이는 재원</div>
+        <div class="src">공공 2.2조, 기업·공공기관 1.8조, 개인 기부 0.7조를 더한 자체 추정(2024~2026년 자료 혼합). 출처: 행정안전부, 열린재정, 한국경제인협회, 사회공헌백서, 아름다운재단.</div>
       </div>
       <div class="ev">
-        <div class="num">7.5%</div>
-        <div class="lab">기업 사회공헌 지표 가운데 성과까지 측정하는 지표.<br>76.7%는 참여자 수 같은 단순 집계입니다.</div>
-        <div class="src">출처: 트리플라잇, 「데이터로 보는 100대 기업 사회공헌 이슈&amp;임팩트」(2024).</div>
+        <div class="num">+43<span>%</span></div>
+        <div class="lab">해안 쓰레기 수거 예산을 48% 늘리는 동안 늘어난 쓰레기</div>
+        <div class="src">돈을 더 써도 문제는 더 빨리 늘었습니다. 출처: 해양수산부 국회 제출자료 보도(2026).</div>
+      </div>
+      <div class="ev">
+        <div class="num">3.6<span>%</span></div>
+        <div class="lab">지역 문제 해결 활동에 실제로 참여한 경기도민</div>
+        <div class="src">참여할 의향이 있다는 응답은 40.3%입니다. 출처: 2024 경기도 사회조사(두 지표는 모집단이 다릅니다).</div>
       </div>
     </div>
-    <p class="say">참여할 뜻은 있는데 참여할 자리가 없고, 활동은 있는데 바뀐 것을 재지 못합니다.</p>
 
-    <div class="sec" style="margin-top:8mm">우리의 해결 방법</div>
-    <div class="solve">
-      <div><i>발견</i><b>지역의 문제를 찾습니다.</b><p>현장 조사와 데이터로 지역의 문제를 먼저 확인합니다.</p></div>
-      <div><i>참여</i><b>시민의 참여를 설계합니다.</b><p>문제를 시민이 참여할 수 있는 콘텐츠와 캠페인으로 만듭니다.</p></div>
-      <div><i>증명</i><b>활동의 가치를 데이터로 잇습니다.</b><p>참여 활동을 증명할 수 있는 데이터로 기록하고 보고합니다.</p></div>
-    </div>
-
-    <div class="sec" style="margin-top:8mm">사업분야</div>
+    <div class="sec" style="margin-top:11mm">사업분야</div>
     <div class="bizs">
       <div class="biz">
         <div class="ph"><img src="assets/ph-research.jpg" alt="강당에서 참여자들이 테이블에 둘러앉아 조사 결과를 함께 읽고 있다."></div>
@@ -425,14 +466,23 @@ body.impose .page{page-break-after:auto;break-after:auto;flex:none}
         <span class="badge">운영 중</span>
         <h3 lang="en">VolunTRIP</h3>
         <div class="cat" lang="en">Participation &amp; Action Platform</div>
-        <p>참여를 실제 행동과 데이터로 잇습니다. 시민 참여 앱(iOS, Android)과 기관용 관리자 화면입니다.</p>
+        <p>참여를 실제 행동과 데이터로 잇는 시민 참여 앱(iOS, Android)과 기관용 관리자 화면입니다.</p>
+        <ul>
+          <li>위치, 사진, 본인 인증으로 실제 활동을 확인합니다.</li>
+          <li>참여 활동이 1365 자원봉사포털 봉사시간으로 인정됩니다.</li>
+          <li>기관이 템플릿으로 캠페인을 직접 만들고 운영합니다.</li>
+          <li>대시보드와 보고서(PDF, 엑셀)를 자동으로 만듭니다.</li>
+        </ul>
         <div class="phone"><img src="assets/shot-app.jpg" alt="볼런트립 앱 홈 화면"></div>
       </div>
       <div class="box m">
         <span class="badge">운영 중</span>
         <h3 lang="en">ESG Impact Platform</h3>
         <p>기관의 이름과 로고로 운영하는 참여·ESG 플랫폼을 구축합니다.</p>
-        <span class="url" lang="en">your-brand.kr</span>
+        <ul>
+          <li>기관 전용 웹사이트에서 활동과 성과를 공개합니다.</li>
+          <li>전담 조직을 따로 두지 않고 구독으로 시작합니다.</li>
+        </ul>
       </div>
       <div class="box s">
         <span class="badge dev">개발·검증 중</span>
@@ -447,23 +497,13 @@ body.impose .page{page-break-after:auto;break-after:auto;flex:none}
     </div>
     <p class="note" style="margin-top:2.4mm">상태는 2026년 11월 기준입니다. 점선 표시는 아직 출시하지 않은 서비스입니다.</p>
 
-    <div class="sec" style="margin-top:8mm">특장점</div>
-    <div class="feats">
-      <div><b>조직을 늘리지 않고 도입</b><p>전담 조직을 따로 두지 않고 구독으로 시작합니다.</p></div>
-      <div><b>검증된 참여 데이터</b><p>위치, 사진, 본인 인증으로 실제 활동을 확인합니다.</p></div>
-      <div><b>자동 리포트</b><p>대시보드와 보고서(PDF, 엑셀)를 자동으로 만듭니다.</p></div>
-      <div><b>평가 기준에 맞춘 증빙</b><p>경영평가, GRI, SDGs 항목에 맞춰 결과를 정리합니다.</p></div>
-      <div><b>봉사시간 연계</b><p>참여 활동이 1365 자원봉사포털 봉사시간으로 인정됩니다.</p></div>
-      <div><b>기관이 직접 만드는 캠페인</b><p>템플릿으로 캠페인을 만들고 관리자 화면에서 운영합니다.</p></div>
-    </div>
-
-    <div class="sec" style="margin-top:8mm">서비스 이용 절차</div>
-    <div class="steps">
-      <div class="step"><i>01</i><b>기획</b><p>지역 자료와 기관의 사업을 함께 읽고 시민 참여 캠페인으로 설계합니다.</p></div>
-      <div class="step"><i>02</i><b>참여</b><p>앱에서 미션을 수행합니다. 위치와 사진으로 인증하고 1365 봉사시간으로 인정받습니다.</p></div>
-      <div class="step"><i>03</i><b>운영</b><p>기관은 관리자 화면에서 참여자, 캠페인, 리워드를 직접 관리합니다.</p></div>
-      <div class="step"><i>04</i><b>기록</b><p>검증한 참여 데이터를 대시보드와 보고서(PDF, 엑셀)로 제공합니다.</p></div>
-      <div class="step"><i>05</i><b>확산</b><p>기관 전용 웹사이트에서 활동과 성과를 공개합니다.</p></div>
+    <div class="sec" style="margin-top:9mm">관리자 화면</div>
+    <div class="admin">
+      <div class="ph"><img src="assets/ph-admin.jpg" alt="볼런트립 관리자 화면. 캠페인 참여 현황과 달성률이 보인다."></div>
+      <div class="adtx">
+        <div><b>실시간 운영</b><p>캠페인별 참여 현황과 달성률을 바로 확인하고, 참여자와 리워드를 관리합니다.</p></div>
+        <div><b>평가 기준별 증빙</b><p>경영평가, GRI, SDGs 항목에 맞춰 결과와 증빙 자료를 정리합니다.</p></div>
+      </div>
     </div>
     <div class="foot"><span>스테디윈스 주식회사</span><span>3</span></div>
   </div>
@@ -523,7 +563,7 @@ body.impose .page{page-break-after:auto;break-after:auto;flex:none}
   <div class="pad">
     <div class="run"><img src="assets/steadywins-ko.svg" alt="스테디윈스"><span class="pg">연혁 및 인증</span></div>
     <div class="head big">
-      <h2>남의 ESG를 돕기 전에,<br>우리부터 검증받았습니다.</h2>
+      <h2>꾸준히 쌓은 이력,<br>공인받은 자격</h2>
     </div>
 
     <div class="sec" style="margin-top:9mm">걸어온 길</div>
@@ -562,17 +602,25 @@ body.impose .page{page-break-after:auto;break-after:auto;flex:none}
     </div>
     <div class="chips"><span>경기도 AI 멤버십 기업</span><span>특허 출원 1건</span><span>상표 등록</span></div>
 
-    <div class="sec" style="margin-top:10mm">회사 개요와 연락처</div>
-    <div class="co">
-      <div><i>회사명</i><span>스테디윈스 주식회사 (STEADYWINS Inc.)</span></div>
-      <div><i>주소</i><span>경기도 화성시 병점구 병점3로 24, 114호</span></div>
-      <div><i>대표</i><span>오규림</span></div>
-      <div><i>전화</i><span class="todo">[전화번호 확인 필요]</span></div>
-      <div><i>설립</i><span>2022년 4월</span></div>
-      <div><i>웹</i><span>steadywins.kr</span></div>
-      <div><i>기준</i><span>수치와 연혁은 2026년 11월 기준</span></div>
-      <div><i>협업 문의</i><span>partner@steadywins.kr</span></div>
+    <div class="contact">
+      <div class="cinfo">
+        <div class="sec">회사 정보</div>
+        <dl>
+          <dt>회사명</dt><dd>스테디윈스 주식회사 (STEADYWINS Inc.)</dd>
+          <dt>대표</dt><dd>오규림</dd>
+          <dt>설립</dt><dd>2022년 4월</dd>
+          <dt>본사</dt><dd>경기도 화성시 병점구 병점3로 24, 114호</dd>
+          <dt>연구소</dt><dd>경기도 성남시 분당구 판교로289번길 20, 2동 602호</dd>
+        </dl>
+      </div>
+      <div class="cask">
+        <div class="sec">협업 문의</div>
+        <p class="ask">함께 일할 방법을 찾고 있다면<br>이야기를 들려주세요.</p>
+        <p class="mail">partner@steadywins.kr</p>
+        <p class="site">steadywins.kr</p>
+      </div>
     </div>
+    <p class="note" style="margin-top:3mm">이 자료의 수치와 연혁은 2026년 11월 기준입니다.</p>
     <div class="foot"><span>스테디윈스 주식회사</span><span>5</span></div>
   </div>
 </section>
