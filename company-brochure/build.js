@@ -1,4 +1,4 @@
-// 회사소개서 PDF 생성: A4 4쪽(읽는 순서) + A3 2장(접지 인쇄용 터잡기)
+// 회사소개서 PDF 생성: A4 6쪽(읽는 순서). 인쇄용 접지 대지는 최종 단계에서 따로 만든다.
 const { chromium } = require('playwright');
 const path = require('path');
 
@@ -19,31 +19,28 @@ const path = require('path');
   );
   console.log('overflow(px):', JSON.stringify(overflow));
 
-  for (const n of [1, 2, 3, 4, 5, 6]) {
+  // 글자 크기 검사: 8.5pt보다 작은 글자가 있으면 알린다
+  const small = await page.evaluate(() => {
+    const out = new Set();
+    for (const el of document.querySelectorAll('.page *')) {
+      if (!el.childNodes.length || el.closest('.draft')) continue;
+      const hasText = [...el.childNodes].some((n) => n.nodeType === 3 && n.textContent.trim());
+      if (!hasText) continue;
+      const pt = parseFloat(getComputedStyle(el).fontSize) * 0.75;
+      if (pt < 8.45) out.add(`${el.className || el.tagName}:${pt.toFixed(1)}`);
+    }
+    return [...out];
+  });
+  console.log('below 8.5pt:', JSON.stringify(small));
+
+  const pages = await page.locator('.page').count();
+  for (let n = 1; n <= pages; n++) {
     await page.locator(`.page[data-p="${n}"]`).screenshot({ path: path.join(dir, 'preview', `p${n}.png`) });
   }
 
   await page.pdf({
     path: path.join(dir, '스테디윈스_회사소개서_A4_6p.pdf'),
     width: '210mm', height: '297mm', printBackground: true, preferCSSPageSize: true,
-  });
-
-  // 3단 접지 터잡기(630×297mm): 바깥면 = 5쪽 | 6쪽 | 1쪽, 안쪽면 = 2쪽 | 3쪽 | 4쪽
-  await page.addStyleTag({ content: '@page{size:630mm 297mm;margin:0}' });
-  await page.evaluate(() => {
-    const get = (n) => document.querySelector(`.page[data-p="${n}"]`);
-    const mk = (...ns) => {
-      const s = document.createElement('div');
-      s.className = 'sheet';
-      s.append(...ns.map(get));
-      return s;
-    };
-    document.body.classList.add('impose');
-    document.body.append(mk(5, 6, 1), mk(2, 3, 4));
-  });
-  await page.pdf({
-    path: path.join(dir, '스테디윈스_회사소개서_3단접지_인쇄용.pdf'),
-    width: '630mm', height: '297mm', printBackground: true,
   });
   await browser.close();
 })();

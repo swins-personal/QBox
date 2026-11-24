@@ -10,390 +10,150 @@
 @font-face{font-family:"SUIT";src:url("assets/SUIT-SemiBold.woff2") format("woff2");font-weight:600}
 @font-face{font-family:"SUIT";src:url("assets/SUIT-Bold.woff2") format("woff2");font-weight:700}
 
+/* 글자 크기는 여섯 단계만 쓴다: 쪽 제목 24 / 강조 문장 15 / 소제목 12 / 본문 10 / 보조 8.5 / 큰 숫자 32 */
 :root{
-  --black:#2d2d2d; --indigo:#1e22aa; --orange:#ff8e00;
-  --surface:#fff; --raised:#f3f3f4; --ink:#2d2d2d; --muted:#6b6b6b; --line:#dcdcde; --line-strong:#8a8a8e;
+  --ink:#2d2d2d; --muted:#5a5a5a; --line:#d5d5d8; --raised:#f3f3f4; --orange:#ff8e00; --indigo:#1e22aa;
+  --t-title:24pt; --t-lead:15pt; --t-sub:12pt; --t-body:10pt; --t-small:8.5pt; --t-num:32pt;
 }
 @page{size:210mm 297mm;margin:0}
 *{box-sizing:border-box;margin:0;padding:0}
 html{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 body{font-family:"SUIT","Pretendard","Noto Sans CJK KR",sans-serif;color:var(--ink);background:#bbb;
-  font-size:9.2pt;line-height:1.6;word-break:keep-all;font-weight:400}
-.page{width:210mm;height:297mm;position:relative;overflow:hidden;background:var(--surface);
-  page-break-after:always;break-after:page}
+  font-size:var(--t-body);line-height:1.65;word-break:keep-all;font-weight:400}
+.page{width:210mm;height:297mm;position:relative;overflow:hidden;background:#fff;page-break-after:always;break-after:page}
 .page:last-child{page-break-after:auto;break-after:auto}
-.pad{position:absolute;inset:15mm 15mm 12mm 15mm;display:flex;flex-direction:column}
-h1,h2,h3{font-weight:400;text-wrap:balance}
+.pad{position:absolute;inset:15mm 16mm 12mm 16mm;display:flex;flex-direction:column}
+h1,h2,h3{font-weight:600;text-wrap:balance}
 p{text-wrap:pretty}
 img{display:block}
+ul{list-style:none}
+@media screen{.page{margin:8mm auto;box-shadow:0 2mm 8mm rgba(0,0,0,.25)}}
 
-/* 공통 */
-.run{display:flex;justify-content:space-between;align-items:center;font-size:7.6pt;font-weight:500;color:var(--muted)}
-.run img{height:4.6mm}
-.foot{margin-top:auto;display:flex;justify-content:space-between;font-size:7.2pt;font-weight:500;color:var(--muted);
-  border-top:.25mm solid var(--line);padding-top:2.6mm}
-.kicker{display:inline-block;font-size:8.6pt;font-weight:600;padding-bottom:1.2mm;border-bottom:.7mm solid var(--orange)}
-.head{display:grid;grid-template-columns:30mm 1fr;align-items:start;margin-top:7mm}
-.head h2{font-size:15pt;line-height:1.45;letter-spacing:-.01em}
-.note{font-size:7.1pt;line-height:1.5;color:var(--muted);font-weight:500}
-.badge{display:inline-block;font-size:6.6pt;font-weight:600;line-height:1;padding:1mm 1.9mm;border:.25mm solid var(--ink);border-radius:10mm;background:#fff}
-.badge.dev{border-style:dashed;color:var(--muted);border-color:var(--line-strong)}
+/* 쪽 공통 */
+.top{display:flex;justify-content:space-between;align-items:center}
+.top img{height:5mm}
+.top span{font-size:var(--t-small);font-weight:500}
+.ptitle{font-size:var(--t-title);line-height:1.25;letter-spacing:-.02em;margin-top:10mm;padding-bottom:3mm;border-bottom:.5mm solid var(--ink)}
+.psub{font-size:var(--t-sub);line-height:1.5;margin-top:3.5mm}
+.sec{font-size:var(--t-sub);font-weight:600;line-height:1.3;margin-top:9mm}
+.small{font-size:var(--t-small);line-height:1.55}
+.foot{margin-top:auto;display:flex;justify-content:space-between;font-size:var(--t-small);font-weight:500;border-top:.25mm solid var(--line);padding-top:2.4mm}
 .ph{position:relative;overflow:hidden;background:var(--raised)}
 .ph img{width:100%;height:100%;object-fit:cover}
-.ph .draft{position:absolute;left:1.6mm;bottom:1.6mm;font-size:6.2pt;font-weight:600;line-height:1;padding:.9mm 1.6mm;background:#fff;border-radius:10mm}
-.slot{border:.3mm dashed var(--line-strong);background:var(--raised);display:flex;align-items:center;justify-content:center;
-  text-align:center;font-size:6.6pt;font-weight:500;color:var(--muted);line-height:1.45}
+.draft{position:absolute;left:1.4mm;bottom:1.4mm;font-size:6.6pt;font-weight:600;line-height:1;padding:.9mm 1.6mm;background:#fff}
+.todo{font-weight:600;border-bottom:.5mm solid var(--orange)}
+.state{display:inline-block;font-size:var(--t-small);font-weight:600;line-height:1;padding:1.2mm 2.2mm;border:.3mm solid var(--ink)}
 
-/* 1·4 표지: 바깥 펼침면 한 장의 배경 */
+/* 1·6 표지 */
 .cover,.back{background:#fff url("assets/steadywins-aurora-dusk-light.jpg") no-repeat;background-size:528mm 297mm}
 .cover{background-position:-264mm 0}
 .back{background-position:-54mm 0}
 .cover .pad,.back .pad{inset:18mm 18mm 15mm 18mm}
-.cover .yr{align-self:flex-end;font-size:8.4pt;font-weight:500;color:var(--muted);text-align:right;line-height:1.5}
-.cover .center{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;align-items:center}
-.cover .center img{width:74mm}
-.cover .slogan{font-size:17pt;font-weight:400;letter-spacing:.01em;margin-top:8mm}
+.cover .top img{height:10mm}
+.cover .top span{font-size:var(--t-body);text-align:right;line-height:1.5}
+.cover h1{font-size:40pt;font-weight:400;line-height:1.24;letter-spacing:-.02em;margin-top:36mm}
+.cover .biz{font-size:var(--t-lead);font-weight:600;line-height:1.5;margin-top:9mm}
+.cover .intro{font-size:var(--t-sub);line-height:1.7;margin-top:3mm;max-width:130mm}
 .cover .bottom{margin-top:auto;display:flex;justify-content:space-between;align-items:flex-end}
-.cover .lines{font-size:8.2pt;font-weight:500}
-.cover .lines i{display:inline-block;width:.25mm;height:2.6mm;background:var(--line-strong);margin:0 2.2mm;vertical-align:-.3mm}
-.cover .doc{font-size:8.2pt;font-weight:500;color:var(--muted);text-align:right;line-height:1.5}
-
-.cover .top{display:flex;justify-content:space-between;align-items:flex-start}
-.cover .top img{height:9mm}
-.cover .top span{font-size:8.4pt;font-weight:500;color:var(--muted);text-align:right;line-height:1.5}
-.cover h1{font-size:42pt;font-weight:300;line-height:1.24;letter-spacing:-.02em;margin-top:38mm}
-.cover .intro{font-size:11.4pt;line-height:1.7;margin-top:8mm;max-width:118mm}
-.cover .tag{font-size:13pt;font-weight:500;letter-spacing:.005em}
-.cover .tag small{display:block;font-size:8.4pt;font-weight:500;margin-top:2mm}
-.cover .tag small i{display:inline-block;width:.25mm;height:2.6mm;background:var(--line-strong);margin:0 2.4mm;vertical-align:-.3mm}
-.cover .doc b{display:block;color:var(--ink);font-size:10.5pt;font-weight:600}
-
-/* 2 사업영역 */
-.areas{display:grid;grid-template-columns:1fr 1fr;gap:4mm;margin-top:5mm}
-.area{border:.25mm solid var(--line);border-radius:3mm;overflow:hidden;display:flex;flex-direction:column}
-.area .ph{height:30mm}
-.area .tx{padding:3.2mm 4mm 3.6mm}
-.area .no{font-size:7.4pt;font-weight:600;color:var(--muted)}
-.area h3{font-size:10.8pt;font-weight:600;line-height:1.35;margin-top:.3mm}
-.area p{font-size:8.2pt;line-height:1.55;margin-top:1.4mm}
-.area p b{font-weight:600}
-.tags{display:flex;flex-wrap:wrap;gap:1.1mm;margin-top:2mm}
-.tags span{font-size:7pt;font-weight:500;line-height:1.2;padding:1mm 2mm;background:var(--raised);border-radius:10mm}
-
-/* 2 제품·서비스: 크기가 다른 상자 */
-.bento{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:31mm;gap:3mm;margin-top:4mm}
-.box{position:relative;overflow:hidden;border-radius:4.5mm;border:.25mm solid var(--line);padding:4mm 4.4mm}
-.box h3{font-size:13pt;font-weight:300;line-height:1.15;letter-spacing:-.02em;margin-top:2.2mm}
-.box .cat{font-size:6.6pt;font-weight:500;color:var(--muted);line-height:1.35;margin-top:.8mm}
-.box p{font-size:8pt;line-height:1.5;margin-top:1.8mm}
-.box.l{grid-column:span 2;grid-row:span 2;background:linear-gradient(#fff,#fff4e4);padding:5mm 5.4mm}
-.box.l h3{font-size:25pt;margin-top:3mm}
-.box.l p{max-width:40mm;font-size:8.6pt;margin-top:2.4mm}
-.box.l .phone{position:absolute;right:6mm;bottom:-1mm;width:31mm;height:50mm;border:1.4mm solid var(--black);border-bottom:0;border-radius:5mm 5mm 0 0;overflow:hidden;background:#fff}
-.box.l .phone img{width:100%}
-.box.m{grid-column:span 2;background:var(--raised);border-color:var(--raised)}
-.box.m p{max-width:60mm}
-.box.m .url{position:absolute;right:4.4mm;bottom:4mm;font-size:7pt;font-weight:500;padding:1.2mm 2.6mm;border:.25mm solid var(--line-strong);border-radius:10mm;background:#fff}
-.box.s{background:#fff}
-
-/* 3 사례 */
-.stats{display:grid;grid-template-columns:repeat(4,1fr);margin-top:5mm;border-top:.35mm solid var(--ink);border-bottom:.25mm solid var(--line)}
-.stat{padding:3mm 3mm 3mm 0}
-.stat+.stat{padding-left:4mm;border-left:.25mm solid var(--line)}
-.stat .num{font-size:30pt;font-weight:300;line-height:1.1;letter-spacing:-.025em;white-space:nowrap}
-.stat .num span{font-size:10pt;font-weight:500;letter-spacing:0;margin-left:.6mm}
-.stat .lab{font-size:8.2pt;font-weight:600;margin-top:.8mm;line-height:1.4}
-.cases{display:grid;grid-template-columns:repeat(3,1fr);gap:4mm;margin-top:4.5mm}
-.case .ph{height:43mm;border-radius:2.5mm}
-.case .who{font-size:7.2pt;font-weight:600;color:var(--muted);margin-top:2.2mm}
-.case h3{font-size:10.6pt;font-weight:600;line-height:1.35;margin-top:.4mm}
-.case p{font-size:8.2pt;line-height:1.55;margin-top:1.2mm}
-.partners{margin-top:3.6mm;font-size:8pt;line-height:1.55;padding:2mm 0;border-top:.25mm solid var(--line);border-bottom:.25mm solid var(--line)}
-.partners b{font-weight:600;margin-right:3mm}
-
-/* 3 이력·인증 */
-.proof{display:grid;grid-template-columns:1.25fr 1fr;gap:7mm;margin-top:6mm}
-.sub{font-size:10pt;font-weight:600;display:flex;align-items:center;gap:1.8mm}
-.sub::before{content:"";width:3mm;height:3mm;background:url("assets/steadywins-spark.svg") center/contain no-repeat;flex:none}
-.hist{margin-top:2.4mm;border-top:.35mm solid var(--ink)}
-.hist div{display:grid;grid-template-columns:14mm 1fr;padding:1.75mm 0;border-bottom:.25mm solid var(--line);font-size:7.8pt;line-height:1.45}
-.hist i{font-style:normal;font-weight:700}
-.certs{margin-top:2.4mm;display:grid;grid-template-columns:repeat(4,1fr);gap:2.2mm}
-.cert .slot{height:36mm}
-.cert span{display:block;font-size:6.9pt;font-weight:600;line-height:1.35;margin-top:1.2mm;text-align:center}
-.chips{margin-top:4mm;display:flex;flex-wrap:wrap;gap:1.3mm}
-.chips span{font-size:7.2pt;font-weight:500;padding:1.1mm 2.2mm;border:.25mm solid var(--line-strong);border-radius:10mm;line-height:1.2}
-
-/* 4 뒷표지 */
-.back .lab{font-size:8.4pt;font-weight:600;display:inline-block;padding-bottom:1.2mm;border-bottom:.7mm solid var(--orange)}
-.back .vision{font-size:25pt;font-weight:300;line-height:1.36;letter-spacing:-.015em;margin-top:5mm}
-.mission{margin-top:5mm;border-top:.35mm solid var(--ink)}
-.mission div{display:grid;grid-template-columns:24mm 1fr;padding:2.5mm 0;border-bottom:.25mm solid #c9c9cc;font-size:10pt;line-height:1.5;align-items:baseline}
-.mission i{font-style:normal;font-size:8pt;font-weight:600;color:var(--muted)}
-.msg{font-size:12.5pt;line-height:1.6;font-weight:400;margin-top:5mm;max-width:150mm}
-.msg-by{font-size:8.2pt;font-weight:600;margin-top:2.4mm}
-.back .bottom{margin-top:auto;display:grid;grid-template-columns:42mm 1fr;align-items:end;gap:6mm}
-.back .logo{height:7mm;width:auto}
-.back .copy{font-size:6.8pt;font-weight:500;color:var(--muted);margin-top:2mm}
-.info{display:grid;grid-template-columns:1.25fr 1fr;column-gap:7mm;border-top:.35mm solid var(--ink)}
-.info div{display:grid;grid-template-columns:15mm 1fr;padding:1.5mm 0;border-bottom:.25mm solid #c9c9cc;font-size:7.8pt;line-height:1.45}
-.info i{font-style:normal;color:var(--muted);font-weight:500}
-.todo{font-weight:600;border-bottom:.5mm solid var(--orange);justify-self:start}
-
-
-/* 6쪽 구성용 */
-.area .ph{height:50mm}
-.area .tx{padding:4.4mm 5mm 5mm}
-.area h3{font-size:12pt}
-.area .q{font-size:9.4pt;font-weight:600;line-height:1.45;margin-top:2.4mm;padding-left:2.4mm;border-left:.6mm solid var(--indigo)}
-.area p{font-size:8.8pt;line-height:1.6;margin-top:2mm}
-.tags{margin-top:3mm}
-.tags span{font-size:7.4pt}
-.areas{gap:5mm;margin-top:7mm}
-.head.big h2{font-size:19pt;line-height:1.4}
-.bento{grid-auto-rows:48mm;gap:4mm;margin-top:7mm}
-.box{padding:5mm 5.4mm}
-.box h3{font-size:16pt}
-.box p{font-size:8.8pt;margin-top:2.4mm}
-.box.l{padding:6.5mm 7mm}
-.box.l h3{font-size:23pt;margin-top:5mm}
-.box.l .cat{font-size:7.6pt;margin-top:1.4mm}
-.box.l p{max-width:39mm;font-size:9.2pt;margin-top:4mm}
-.box.l .phone{right:6mm;width:35mm;height:74mm}
-.box.m .url{right:5.4mm;bottom:5mm}
-.sec{font-size:11pt;font-weight:600;display:flex;align-items:center;gap:2mm}
-.sec::before{content:"";width:3.2mm;height:3.2mm;background:url("assets/steadywins-spark.svg") center/contain no-repeat;flex:none}
-.steps{margin-top:3mm;display:grid;grid-template-columns:repeat(5,1fr);gap:3mm}
-.step{border-top:.35mm solid var(--ink);padding-top:2.4mm}
-.step i{font-style:normal;font-size:7.4pt;font-weight:600;color:var(--muted)}
-.step b{display:block;font-size:10.6pt;font-weight:600;margin-top:.4mm}
-.step p{font-size:8pt;line-height:1.55;margin-top:1.4mm}
-.shot{margin-top:7mm;display:grid;grid-template-columns:1fr 50mm;gap:6mm;align-items:end}
-.shot .ph{height:44mm;border:.25mm solid var(--line);border-radius:3mm}
-.shot .ph img{object-position:top left}
-.shot p{font-size:8.4pt;line-height:1.6}
-.shot p b{display:block;font-size:9.6pt;font-weight:600;margin-bottom:1mm}
-.stats{margin-top:7mm}
-.stat{padding:4.5mm 3mm 4.5mm 0}
-.stat .num{font-size:32pt}
-.cases{gap:5mm;margin-top:8mm}
-.case .ph{height:66mm}
-.case h3{font-size:11.6pt}
-.case p{font-size:8.8pt;line-height:1.6;margin-top:1.6mm}
-.more{margin-top:3mm;display:grid;grid-template-columns:1fr 1fr;column-gap:7mm;border-top:.35mm solid var(--ink)}
-.more div{display:grid;grid-template-columns:34mm 1fr;gap:2mm;padding:2.6mm 0;border-bottom:.25mm solid var(--line);font-size:8.4pt;line-height:1.5;align-items:baseline}
-.more b{font-weight:600}
-.hist{display:grid;grid-template-columns:1fr 1fr;column-gap:8mm;margin-top:3mm}
-.hist div{font-size:8.4pt;padding:2.2mm 0;grid-template-columns:15mm 1fr}
-.certs{gap:4mm;margin-top:3mm}
-.cert .slot{height:52mm;font-size:7.4pt}
-.cert span{font-size:8pt;margin-top:1.8mm}
-.chips span{font-size:8pt;padding:1.3mm 2.6mm}
-.co{margin-top:3mm;display:grid;grid-template-columns:1fr 1fr;column-gap:8mm;border-top:.35mm solid var(--ink)}
-.co div{display:grid;grid-template-columns:18mm 1fr;padding:1.9mm 0;border-bottom:.25mm solid var(--line);font-size:8.4pt;line-height:1.5}
-.co i{font-style:normal;color:var(--muted);font-weight:500}
-.back .bottom{grid-template-columns:1fr auto}
-.back .web{font-size:8.6pt;font-weight:500;text-align:right;line-height:1.6}
-
-
-/* 쪽 안 배치: 항목명 아래 큰 제목, 사업영역은 가로 줄 */
-.head{display:block}
-.head h2{margin-top:5mm}
-.head.big h2{font-size:23pt;line-height:1.3}
-.areas{grid-template-columns:1fr;gap:0;margin-top:8mm;border-top:.35mm solid var(--ink)}
-.area{flex-direction:row;align-items:stretch;border:0;border-bottom:.25mm solid var(--line);border-radius:0;overflow:visible;padding:4.6mm 0;gap:6mm}
-.area .ph{width:48mm;height:37mm;flex:none;border-radius:3mm}
-.area .tx{flex:1;padding:0;display:grid;grid-template-columns:60mm 1fr;column-gap:6mm;align-content:start}
-.area h3{font-size:11.6pt;line-height:1.4;margin-top:1mm;text-wrap:wrap;word-break:keep-all}
-.area .q{margin-top:.6mm;font-size:10pt}
-.area p{margin-top:2.6mm}
-.cases{margin-top:4mm}
-.case .ph{height:56mm}
-
-
-/* 2쪽: 비전·사회문제·해결·사업분야 */
-.why{display:grid;grid-template-columns:1fr 1fr;gap:5mm;margin-top:3.5mm}
-.ev{background:var(--raised);border-left:.7mm solid var(--indigo);padding:4mm 5mm 3.8mm}
-.ev .num{font-size:30pt;font-weight:300;line-height:1.1;letter-spacing:-.02em}
-.ev .lab{font-size:8.8pt;font-weight:600;margin-top:1.2mm;line-height:1.45}
-.ev .src{font-size:6.9pt;color:var(--muted);font-weight:500;margin-top:1.6mm;line-height:1.5}
-.say{font-size:11.5pt;line-height:1.5;font-weight:500;margin-top:4mm}
-.solve{margin-top:3.5mm;display:grid;grid-template-columns:repeat(3,1fr);gap:4mm}
-.solve div{border-top:.35mm solid var(--ink);padding-top:2.4mm}
-.solve i{font-style:normal;font-size:7.4pt;font-weight:600;color:var(--muted)}
-.solve b{display:block;font-size:10.2pt;font-weight:600;margin-top:.4mm}
-.solve p{font-size:8.2pt;line-height:1.55;margin-top:1.2mm}
-.bizs{margin-top:3.5mm;display:grid;grid-template-columns:repeat(4,1fr);gap:3.5mm}
-.biz .ph{height:42mm;border-radius:2.5mm}
-.biz .no{display:block;font-size:7.2pt;font-weight:600;color:var(--muted);margin-top:2.2mm}
-.biz h3{font-size:10pt;font-weight:600;line-height:1.35;margin-top:.3mm}
-.biz .bq{font-size:7.8pt;line-height:1.5;margin-top:1.4mm}
-.biz .tags{margin-top:1.8mm;gap:.9mm}
-.biz .tags span{font-size:6.6pt;padding:.9mm 1.7mm}
-/* 3쪽: 특장점 */
-.bento{grid-auto-rows:43mm}
-.box.l .phone{height:66mm}
-.feats{margin-top:3.5mm;display:grid;grid-template-columns:repeat(3,1fr);gap:0 4mm;border-top:.35mm solid var(--ink)}
-.feats div{padding:3mm 0 3.2mm;border-bottom:.25mm solid var(--line)}
-.feats b{display:block;font-size:9.8pt;font-weight:600}
-.feats p{font-size:8.2pt;line-height:1.55;margin-top:.8mm}
-/* 6쪽: 뒷표지 */
-.back .center{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;align-items:center}
-.back .center img{width:62mm}
-.back .slogan{font-size:15pt;margin-top:7mm;letter-spacing:.01em}
+.cover .slogan{font-size:var(--t-lead);font-weight:500}
+.cover .doc{font-size:var(--t-body);font-weight:600;text-align:right;line-height:1.5}
+.back .center{position:absolute;left:0;right:0;top:44%;transform:translateY(-50%);display:flex;flex-direction:column;align-items:center;text-align:center}
+.back .center img{width:66mm}
+.back .bv{font-size:var(--t-lead);line-height:1.6;margin-top:10mm}
+.back .slogan{font-size:var(--t-sub);font-weight:500;margin-top:5mm}
 .back .pad{justify-content:flex-end}
-.back .bottom{margin-top:auto;display:flex;justify-content:space-between;align-items:flex-end}
-.back .copy{margin:0}
+.back .contact{display:grid;grid-template-columns:1fr 1fr;gap:8mm;font-size:var(--t-body);line-height:1.7}
+.back .contact b{font-weight:600}
+.back .contact div:last-child{text-align:right}
 
+/* 2 회사 소개 */
+.vision{font-size:21pt;font-weight:400;line-height:1.36;letter-spacing:-.015em;margin-top:3mm}
+.greet{display:grid;grid-template-columns:62mm 1fr;gap:8mm;margin-top:3mm}
+.greet .pull{font-size:var(--t-lead);font-weight:500;line-height:1.5}
+.greet p+p{margin-top:2.6mm}
+.greet .sign{font-weight:600;margin-top:3.4mm}
+.areas{display:grid;grid-template-columns:1fr 1fr;gap:8mm 8mm;margin-top:3.5mm}
+.area h3{font-size:var(--t-sub);line-height:1.35;padding-top:2.6mm;border-top:.3mm solid var(--ink)}
+.area h3 i{font-style:normal;font-weight:500;margin-right:2mm}
+.area .row{display:grid;grid-template-columns:38mm 1fr;gap:4.5mm;margin-top:3mm}
+.area .ph{height:46mm}
+.area p{font-size:var(--t-body);line-height:1.6}
+.area .case{font-size:var(--t-small);line-height:1.5;margin-top:1.8mm}
+.area .case b{font-weight:600;margin-right:1.6mm}
 
-/* 쪽 이름은 맨 위 머리글에 */
-.run .pg{font-size:8.6pt;font-weight:600;color:var(--ink);padding-bottom:1.2mm;border-bottom:.7mm solid var(--orange)}
-.head h2{margin-top:0}
-.head{margin-top:9mm}
-.more{margin-top:6mm}
-
-
-/* 5쪽: 과거에서 현재로 가는 연혁 */
-.tline{position:relative;margin-top:4mm;display:grid;grid-template-columns:.8fr 1fr 1.15fr 1.25fr;column-gap:5mm;padding-top:7mm}
-.tline .axis{position:absolute;left:0;right:0;top:0;display:flex;justify-content:space-between;font-size:7.2pt;font-weight:600;color:var(--muted)}
-.tline::before{content:"";position:absolute;left:0;right:3mm;top:8.5mm;height:.4mm;background:var(--ink)}
-.tline::after{content:"";position:absolute;right:0;top:7.2mm;border-left:3.4mm solid var(--orange);border-top:1.5mm solid transparent;border-bottom:1.5mm solid transparent}
-.tl{position:relative;padding-top:5mm}
-.tl .dot{position:absolute;left:0;top:.2mm;width:3mm;height:3mm;border-radius:50%;background:#fff;border:.5mm solid var(--ink)}
-.tl.now .dot{background:var(--orange);border-color:var(--orange)}
-.tl .yr{font-size:17pt;font-weight:300;line-height:1.2;letter-spacing:-.02em}
-.tl .yr span{font-size:6.8pt;font-weight:600;letter-spacing:0;margin-left:2mm;padding:.8mm 1.8mm;border:.25mm solid var(--ink);border-radius:10mm;vertical-align:1.6mm}
-.tl ul{list-style:none;margin-top:2mm;border-top:.25mm solid var(--line)}
-.tl li{display:grid;grid-template-columns:9mm 1fr;font-size:7.8pt;line-height:1.45;padding:1.5mm 0;border-bottom:.25mm solid var(--line)}
-.tl li i{font-style:normal;font-weight:700}
-/* 5쪽: 인증서 사진 */
-.certs{grid-template-columns:repeat(6,1fr);gap:3mm;margin-top:3.5mm}
-.cert .ci{height:34mm;border:.25mm solid var(--line);background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden}
-.cert .ci img{max-width:100%;max-height:100%}
-.cert span{font-size:7pt;line-height:1.35;margin-top:1.6mm}
-.cert span small{display:block;font-size:6.2pt;font-weight:500;color:var(--muted);margin-top:.4mm}
-.chips{margin-top:3.5mm}
-/* 6쪽 */
-.back .bv{font-size:12.5pt;line-height:1.6;font-weight:400;text-align:center;margin-top:9mm}
-.back .slogan{margin-top:5mm;font-size:13pt}
-
-
-/* 선과 스파크: 얇은 선 위의 점, 끝은 스파크 */
-.head{position:relative}
-.orn{position:absolute;right:0;top:50%;transform:translateY(-50%);width:72mm;height:21.6mm;overflow:visible}
-.orn path{fill:none;stroke:#a9a9ad;stroke-width:.7}
-.orn circle{fill:#fff;stroke:#8a8a8e;stroke-width:.7}
-.steps,.solve{position:relative}
-.steps::before,.solve::before{content:"";position:absolute;left:0;right:2.6mm;top:1.3mm;height:.25mm;background:#a9a9ad}
-.steps::after,.solve::after{content:"";position:absolute;right:0;top:-.2mm;width:3.2mm;height:3.2mm;background:url("assets/steadywins-spark.svg") center/contain no-repeat}
-.step,.solve div{position:relative;border-top:0;padding-top:5.4mm}
-.step::before,.solve div::before{content:"";position:absolute;left:0;top:.2mm;width:2.4mm;height:2.4mm;border-radius:50%;background:#fff;border:.25mm solid #8a8a8e}
-.tline::before{height:.25mm;background:#a9a9ad;right:2.6mm;top:8.6mm}
-.tline::after{border:0;right:0;top:7.1mm;width:3.2mm;height:3.2mm;background:url("assets/steadywins-spark.svg") center/contain no-repeat}
-.tl .dot{width:2.4mm;height:2.4mm;border:.25mm solid #8a8a8e;top:.5mm}
-.tl.now .dot{background:#fff;border-color:var(--orange);border-width:.5mm}
-
-
-/* 정리: 장식을 줄이고 위계를 키운다 */
-.head.big h2{font-size:28pt;font-weight:300;line-height:1.26;letter-spacing:-.02em}
-.head{margin-top:12mm}
-.sec{font-size:8.6pt;font-weight:600;gap:0;border-top:.25mm solid var(--line);padding-top:3mm}
-.sec::before{display:none}
-.sub::before{display:none}
-.ev{background:none;border-left:0;border-top:.35mm solid var(--ink);padding:3.4mm 0 0}
-.ev .num{font-size:36pt}
-.why{gap:8mm}
-.say{font-size:12pt;font-weight:400;margin-top:5mm}
-.tags{gap:0}
-.tags span,.biz .tags span{background:none;padding:0;border-radius:0;color:var(--muted);font-size:7pt}
-.tags span+span::before{content:"·";margin:0 1.2mm}
-.chips{gap:0}
-.chips span{border:0;padding:0;border-radius:0;color:var(--muted);font-size:7.8pt}
-.chips span+span::before{content:"·";margin:0 1.6mm}
-.biz .ph,.case .ph,.area .ph,.shot .ph{border-radius:1mm}
-.box{border-radius:2mm}
-.box.m .url{border-radius:1mm}
-.feats,.more,.co{border-top:0}
-.feats{margin-top:1mm}.more{margin-top:5mm;border-top:.25mm solid var(--line)}.co{margin-top:1mm}
-.stats{border-top:.35mm solid var(--ink)}
-.stat{padding:4mm 3mm 4mm 0}
-.stat .num{font-size:34pt}
-.run .pg{border-bottom:0;padding-bottom:0;color:var(--muted);font-weight:500}
-.cert .ci{border-color:var(--line)}
-.tl .yr span{border:0;padding:0;color:var(--muted);font-weight:500;vertical-align:1mm}
-
-
-/* 2쪽 사회문제 */
-.plead{font-size:12pt;line-height:1.6;margin-top:4mm;max-width:158mm}
-.why{grid-template-columns:repeat(3,1fr);gap:7mm;margin-top:7mm}
-.ev .num{font-size:38pt}
-.ev .num span{font-size:12pt;font-weight:500;letter-spacing:0;margin-left:1mm}
-.ev .lab{font-size:9.4pt;line-height:1.5;margin-top:2mm}
-.ev .src{font-size:7pt;line-height:1.55;margin-top:2mm}
-.biz .ph{height:50mm}
-/* 3쪽 서비스 */
-.bento{grid-auto-rows:54mm}
-.box ul{list-style:none;margin-top:2.6mm}
-.box li{position:relative;padding-left:3mm;font-size:8pt;line-height:1.5;margin-top:1mm}
-.box li::before{content:"";position:absolute;left:0;top:1.9mm;width:1.2mm;height:.25mm;background:var(--ink)}
-.box.l p{max-width:41mm;margin-top:3mm;font-size:8.8pt}
-.box.l ul{max-width:41mm}
-.box.l .phone{height:74mm;width:30mm;right:5mm;border-width:1.2mm}
-.box.m p{max-width:none}
-.admin{margin-top:4mm;display:grid;grid-template-columns:1fr 52mm;gap:7mm;align-items:start}
-.admin .ph{height:62mm;border:.25mm solid var(--line);border-radius:1mm}
+/* 3 서비스 */
+.svcs{display:grid;grid-template-columns:1fr 1fr;gap:6mm;margin-top:7mm}
+.svc{border:.3mm solid var(--ink);padding:6mm 6mm 7mm;position:relative}
+.svc h3{font-size:19pt;line-height:1.25;letter-spacing:-.02em;margin-top:3.4mm}
+.svc h3 small{display:block;font-size:var(--t-small);font-weight:500;letter-spacing:0;margin-top:.6mm}
+.svc .kind{font-size:var(--t-body);font-weight:600;margin-top:2.6mm}
+.svc p{margin-top:1.4mm;line-height:1.6}
+.svc li{position:relative;padding-left:3.4mm;margin-top:1.5mm;line-height:1.55}
+.svc li::before{content:"";position:absolute;left:0;top:2.5mm;width:1.4mm;height:.3mm;background:var(--ink)}
+.svc ul{margin-top:2.4mm}
+.svc.vt ul{max-width:43mm}
+.svc.vt .phone{position:absolute;right:6mm;bottom:7mm;width:27mm;border:1.1mm solid var(--ink);border-radius:4mm;overflow:hidden;background:#fff}
+.svc.vt .phone img{width:100%}
+.right{display:flex;flex-direction:column;gap:6mm}
+.right .svc{flex:1}
+.next{background:var(--raised);padding:4.4mm 5.4mm}
+.next h4{font-size:var(--t-body);font-weight:600}
+.next dl{display:grid;grid-template-columns:auto 1fr;gap:1.2mm 4mm;margin-top:2mm;font-size:var(--t-small);line-height:1.5}
+.next dt{font-weight:600}
+.admin{display:grid;grid-template-columns:1fr 54mm;gap:7mm;margin-top:3.5mm;align-items:start}
+.admin .ph{height:82mm;border:.25mm solid var(--line)}
 .admin .ph img{object-position:top left}
-.adtx div+div{margin-top:5mm}
-.adtx b{display:block;font-size:10pt;font-weight:600}
-.adtx p{font-size:8.6pt;line-height:1.6;margin-top:1mm}
-/* 5쪽 연혁: 항목 사이 선을 없애고 2026을 강조 */
-.tl ul{border-top:0;margin-top:2.4mm}
-.tl li{border-bottom:0;padding:1.05mm 0;font-size:8pt;grid-template-columns:8mm 1fr}
-.tl li i{font-weight:500;color:var(--muted)}
-.tl .yr{color:var(--muted)}
-.tl.now .yr{color:var(--ink);font-weight:600;font-size:21pt}
-.tl.now .yr span{color:var(--ink);font-weight:600;font-size:7.4pt;margin-left:2mm;padding:.9mm 2mm;background:var(--orange);border-radius:10mm;vertical-align:2mm}
-.tl.now .dot{background:var(--orange);border-color:var(--orange)}
-.tl.now li{font-weight:500}
-.tl.now li i{color:var(--ink);font-weight:700}
-.tline{grid-template-columns:.8fr 1fr 1.15fr 1.3fr}
-/* 5쪽 아래: 회사 정보와 문의 */
-.contact{margin-top:9mm;display:grid;grid-template-columns:1.15fr 1fr;gap:10mm}
-.contact dl{display:grid;grid-template-columns:15mm 1fr;row-gap:1.6mm;margin-top:3mm;font-size:8.4pt;line-height:1.5}
-.contact dt{color:var(--muted);font-weight:500}
-.cask .ask{font-size:12pt;line-height:1.5;margin-top:3mm}
-.cask .mail{font-size:15pt;font-weight:500;letter-spacing:-.01em;margin-top:3.5mm;display:inline-block;padding-bottom:1mm;border-bottom:.6mm solid var(--orange)}
-.cask .site{font-size:9pt;font-weight:500;color:var(--muted);margin-top:2mm}
+.admin b{display:block;font-size:var(--t-sub);font-weight:600}
+.admin p{margin-top:1mm;line-height:1.6}
+.admin div div+div{margin-top:5mm}
 
+/* 4 실적·사례 */
+.orgs{display:grid;grid-template-columns:repeat(4,1fr);margin-top:3mm;border-top:.3mm solid var(--ink)}
+.orgs span{font-size:11pt;font-weight:600;line-height:1.35;padding:3mm 2mm 3mm 0;border-bottom:.25mm solid var(--line)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);margin-top:3mm;border-top:.3mm solid var(--ink);border-bottom:.25mm solid var(--line)}
+.stat{padding:3.4mm 2mm 3.6mm 0}
+.stat+.stat{padding-left:4mm;border-left:.25mm solid var(--line)}
+.stat .num{font-size:var(--t-num);font-weight:400;line-height:1.1;letter-spacing:-.03em;white-space:nowrap}
+.stat .num span{font-size:var(--t-body);font-weight:600;letter-spacing:0;margin-left:.6mm}
+.stat .lab{font-weight:600;margin-top:1mm}
+.cases{display:grid;grid-template-columns:repeat(3,1fr);gap:5mm;margin-top:3.5mm}
+.case .ph{height:66mm}
+.case .who{font-size:var(--t-small);font-weight:600;margin-top:2.6mm}
+.case h3{font-size:var(--t-sub);line-height:1.35;margin-top:.4mm}
+.case p{font-size:var(--t-body);line-height:1.6;margin-top:1.6mm}
 
-/* 2쪽: 하고 싶은 말 */
-.pull{font-size:19pt;font-weight:400;line-height:1.42;letter-spacing:-.015em;margin-top:6mm}
-.essay{margin-top:7mm;column-count:2;column-gap:10mm}
-.essay p{font-size:10.2pt;line-height:1.82;break-inside:avoid;margin-bottom:4mm}
-
-
-/* 2쪽 사업분야: 제목, 사진, 설명, 사례 */
-.biz .no{margin-top:0}
-.biz h3{font-size:10.6pt;min-height:2.7em}
-.biz .ph{height:34mm;margin-top:2.6mm}
-.biz .bd{font-size:8.2pt;line-height:1.6;margin-top:2.6mm;min-height:5em}
-.biz .bk{font-size:7.6pt;line-height:1.6;font-weight:500;margin-top:2mm;padding-top:2mm;border-top:.25mm solid var(--line)}
-.biz .bk i{display:block;font-style:normal;font-size:6.8pt;font-weight:600;color:var(--muted);margin-bottom:.6mm}
-/* 3쪽: 실제 비율의 휴대폰 */
-.box.l .phone{width:31mm;height:auto;right:6mm;bottom:6mm;border:1.2mm solid var(--black);border-radius:4.5mm}
-.box.l .phone img{width:100%;height:auto}
-
-/* 접지 대지(인쇄용 터잡기) */
-body.impose{background:#fff}
-body.impose .sheet{width:630mm;height:297mm;display:flex;page-break-after:always;break-after:page}
-body.impose .sheet:last-child{page-break-after:auto;break-after:auto}
-body.impose .page{page-break-after:auto;break-after:auto;flex:none}
-@media screen{body:not(.impose) .page{margin:8mm auto;box-shadow:0 2mm 8mm rgba(0,0,0,.25)}}
+/* 5 연혁·인증 */
+.tline{position:relative;display:grid;grid-template-columns:.82fr 1fr 1.12fr 1.28fr;column-gap:5mm;margin-top:4mm;padding-top:4mm}
+.tline::before{content:"";position:absolute;left:0;right:3mm;top:1.2mm;height:.3mm;background:#8a8a8e}
+.tline::after{content:"";position:absolute;right:0;top:-.5mm;width:3.6mm;height:3.6mm;background:url("assets/steadywins-spark.svg") center/contain no-repeat}
+.tl{position:relative;padding-top:2mm}
+.tl::before{content:"";position:absolute;left:0;top:-4.1mm;width:2.6mm;height:2.6mm;border-radius:50%;background:#fff;border:.3mm solid #8a8a8e}
+.tl .yr{font-size:17pt;font-weight:400;line-height:1.2;letter-spacing:-.02em}
+.tl li{display:grid;grid-template-columns:9.5mm 1fr;font-size:var(--t-small);line-height:1.5;margin-top:1.8mm}
+.tl li i{font-style:normal;font-weight:600}
+.tl ul{margin-top:1.6mm}
+.tl.now::before{background:var(--orange);border-color:var(--orange)}
+.tl.now .yr{font-weight:700}
+.tl.now .yr span{font-size:var(--t-small);font-weight:600;letter-spacing:0;margin-left:2mm;padding:.8mm 2mm;background:var(--orange);vertical-align:1.6mm}
+.tl.now li{font-weight:600}
+.certs{display:grid;grid-template-columns:repeat(4,1fr);gap:5mm;margin-top:3.5mm}
+.cert .ci{height:60mm;border:.25mm solid var(--line);display:flex;align-items:center;justify-content:center;background:#fff}
+.cert .ci img{max-width:100%;max-height:100%}
+.cert b{display:block;font-size:var(--t-body);font-weight:600;line-height:1.35;margin-top:2mm}
+.cert span{display:block;font-size:var(--t-small);line-height:1.4;margin-top:.4mm}
+.also{margin-top:3.5mm;font-size:var(--t-small);line-height:1.6}
+.also b{font-weight:600;margin-right:2mm}
+.info{display:grid;grid-template-columns:1.2fr 1fr;gap:10mm;margin-top:3mm}
+.info dl{display:grid;grid-template-columns:16mm 1fr;row-gap:1.6mm;font-size:var(--t-body);line-height:1.5}
+.info dt{font-weight:600}
+.info .tel{font-size:var(--t-lead);font-weight:600;line-height:1.4}
+.info .mail{font-size:var(--t-sub);font-weight:600;margin-top:1mm}
+.info .web{margin-top:.6mm}
 </style>
 </head>
 <body>
 
-<!-- 1. 표지 -->
+<!-- 1. 앞표지 -->
 <section class="page cover" data-p="1">
   <div class="pad">
     <div class="top">
@@ -401,113 +161,126 @@ body.impose .page{page-break-after:auto;break-after:auto;flex:none}
       <span>회사소개서<br>2027</span>
     </div>
     <h1>지역의 문제를,<br>시민의 참여로.</h1>
+    <p class="biz">지역문제 해결 프로젝트 · ESG 참여 플랫폼 전문기업</p>
     <p class="intro">스테디윈스는 지역의 문제를 발견하고, 시민과 기관이 함께 해결하는 프로젝트를 기획하고 실행합니다.</p>
     <div class="bottom">
-      <div class="tag"><span lang="en">Leave it better.</span><small>지역사회 조사·연구<i></i>지속가능관광<i></i>ESG·CSR 플랫폼<i></i>데이터·AI 솔루션</small></div>
-      <div class="doc"><b>스테디윈스 주식회사</b>STEADYWINS Inc.</div>
+      <p class="slogan" lang="en">Leave it better.</p>
+      <p class="doc">스테디윈스 주식회사<br>STEADYWINS Inc.</p>
     </div>
   </div>
 </section>
 
-<!-- 2. 사업영역 -->
+<!-- 2. 회사 소개 -->
 <section class="page" data-p="2">
   <div class="pad">
-    <div class="run"><img src="assets/steadywins-ko.svg" alt="스테디윈스"><span class="pg">비전</span></div>
-    <div class="head big">
-      <h2>재밌는 도시, 따뜻한 사회,<br>차가운 지구 만들기.</h2>
+    <div class="top"><img src="assets/steadywins-ko.svg" alt="스테디윈스"><span>회사소개서 2027</span></div>
+    <h2 class="ptitle">회사 소개</h2>
+
+    <div class="sec" style="margin-top:6mm">비전</div>
+    <p class="vision">재밌는 도시, 따뜻한 사회, 차가운 지구 만들기.</p>
+
+    <div class="sec">인사말</div>
+    <div class="greet">
+      <p class="pull">문제가 실제로 바뀐 곳에는 언제나 시민이 있었습니다.</p>
+      <div>
+        <p>동네의 문제는 대개 작습니다. 작아서 미뤄지고, 미뤄진 문제는 모여서 큰 비용이 됩니다. 해마다 많은 예산이 쓰이지만, 행사가 끝나면 다시 제자리로 돌아오는 모습을 여러 번 보았습니다.</p>
+        <p>스테디윈스는 누구나 자기 동네의 변화에 참여할 수 있는 자리를 만들고, 그 참여를 기록으로 남깁니다. 착한 일에서 멈추지 않고 오래가는 방식을 만들겠습니다.</p>
+        <p class="sign">스테디윈스 주식회사 대표 오규림</p>
+      </div>
     </div>
 
-    <div class="sec" style="margin-top:10mm">우리가 하고 싶은 말</div>
-    <p class="pull">문제가 실제로 바뀐 곳에는<br>언제나 시민이 있었습니다.</p>
-    <div class="essay">
-      <p>동네의 문제는 대개 작습니다. 공원에 버려진 쓰레기, 휠체어가 넘지 못하는 턱 하나, 손님이 줄어든 골목. 작아서 미뤄지고, 미뤄진 문제는 모여서 큰 비용이 됩니다.</p>
-      <p>해마다 많은 예산이 이런 문제에 쓰입니다. 그런데도 행사가 한 번 끝나면 다시 제자리로 돌아오는 모습을 여러 번 보았습니다. 부족한 것은 돈이 아니라 꾸준히 이어지는 실천이었습니다.</p>
-      <p>그래서 스테디윈스는 누구나 자기 동네의 변화에 참여할 수 있는 자리를 만듭니다. 그리고 그 참여가 사라지지 않도록 기록으로 남깁니다.</p>
-      <p>착한 일에서 멈추지 않고, 오래가는 방식을 만들겠습니다. 꾸준함이 결국 이긴다고 믿습니다.</p>
-    </div>
-
-    <div class="sec" style="margin-top:11mm">사업분야</div>
-    <div class="bizs">
-      <div class="biz">
-        <span class="no">01</span>
-        <h3>지역사회 조사·연구와<br>참여 프로젝트</h3>
-        <div class="ph"><img src="assets/ph-research.jpg" alt="강당에서 참여자들이 테이블에 둘러앉아 조사 결과를 함께 읽고 있다."></div>
-        <p class="bd">시민과 학생이 지역의 문제를 직접 조사하고 기록합니다. 결과는 연구와 행정 제안의 자료가 됩니다.</p>
-        <p class="bk"><i>사례</i>봉담권역 대학가 리빙랩<br>백석대학교 지역조사 리빙랩<br>화성시연구원 상권 실태 조사</p>
+    <div class="sec">사업 분야</div>
+    <div class="areas">
+      <div class="area">
+        <h3><i>01</i>지역사회 조사·연구와 참여 프로젝트</h3>
+        <div class="row">
+          <div class="ph"><img src="assets/ph-research.jpg" alt="강당에서 참여자들이 테이블에 둘러앉아 조사 결과를 함께 읽고 있다."></div>
+          <div>
+            <p>시민과 학생이 지역의 문제를 직접 조사하고 기록합니다. 결과는 연구와 행정 제안의 자료가 됩니다.</p>
+            <p class="case"><b>사례</b>봉담권역 대학가 리빙랩, 백석대학교 지역조사 리빙랩</p>
+          </div>
+        </div>
       </div>
-      <div class="biz">
-        <span class="no">02</span>
-        <h3>지속가능관광<br>콘텐츠·프로그램</h3>
-        <div class="ph"><img src="assets/ph-tour.jpg" alt="호숫가 산책로를 배낭을 멘 사람들이 함께 걷고 있다."><span class="draft">시안용 사진</span></div>
-        <p class="bd">지역의 생태·환경·사회 문제를 주제로, 참여자의 경험을 지역 이해와 행동으로 잇는 여행을 만듭니다.</p>
-        <p class="bk"><i>사례</i>경기도 모두의여행지도<br>생물다양성 탐조여행<br>화성 융건릉 프로그램</p>
+      <div class="area">
+        <h3><i>02</i>지속가능관광 콘텐츠·프로그램</h3>
+        <div class="row">
+          <div class="ph"><img src="assets/ph-tour.jpg" alt="호숫가 산책로를 배낭을 멘 사람들이 함께 걷고 있다."><span class="draft">시안용 사진</span></div>
+          <div>
+            <p>지역의 생태·환경·사회 문제를 주제로, 참여자의 경험을 지역 이해와 행동으로 잇는 여행을 만듭니다.</p>
+            <p class="case"><b>사례</b>경기도 모두의여행지도, 생물다양성 탐조여행</p>
+          </div>
+        </div>
       </div>
-      <div class="biz">
-        <span class="no">03</span>
-        <h3>ESG·CSR 실행·<br>성과관리 플랫폼</h3>
-        <div class="ph"><img src="assets/ph-case-plogging.jpg" alt="우비를 입은 참여자들이 풀숲에서 쓰레기를 줍고 있다."></div>
-        <p class="bd">시민과 임직원은 앱으로 참여하고, 기관은 활동과 성과를 관리자 화면과 보고서로 관리합니다.</p>
-        <p class="bk"><i>사례</i>화성시 에코플로깅<br>용인시 헬퍼스하이<br>경기도여성가족재단 임직원 ESG</p>
+      <div class="area">
+        <h3><i>03</i>ESG·CSR 실행·성과관리 플랫폼</h3>
+        <div class="row">
+          <div class="ph"><img src="assets/ph-case-plogging.jpg" alt="우비를 입은 참여자들이 풀숲에서 쓰레기를 줍고 있다."></div>
+          <div>
+            <p>시민과 임직원은 앱으로 참여하고, 기관은 활동과 성과를 관리자 화면과 보고서로 관리합니다.</p>
+            <p class="case"><b>사례</b>화성시 에코플로깅, 경기도여성가족재단 임직원 ESG</p>
+          </div>
+        </div>
       </div>
-      <div class="biz">
-        <span class="no">04</span>
-        <h3>사회문제<br>데이터·AI 솔루션</h3>
-        <div class="ph"><img src="assets/ph-data.jpg" alt="워크숍장에 세워 둔 설문판에 참여자들이 붙인 빨간 스티커가 모여 있다." style="object-position:50% 80%"></div>
-        <p class="bd">참여 활동에서 모은 데이터로 지역의 이슈를 읽습니다. 진단과 AI 기능은 개발 중입니다.</p>
-        <p class="bk"><i>키워드</i>참여형 데이터 수집·생성<br>지역 이슈 진단<br>AI 에이전트</p>
+      <div class="area">
+        <h3><i>04</i>사회문제 데이터·AI 솔루션</h3>
+        <div class="row">
+          <div class="ph"><img src="assets/ph-data.jpg" alt="워크숍장에 세워 둔 설문판에 참여자들이 붙인 빨간 스티커가 모여 있다." style="object-position:50% 80%"></div>
+          <div>
+            <p>참여 활동에서 모은 데이터로 지역의 이슈를 읽습니다. 진단과 AI 기능은 개발 중입니다.</p>
+            <p class="case"><b>분야</b>참여형 데이터 수집, 지역 이슈 진단</p>
+          </div>
+        </div>
       </div>
     </div>
     <div class="foot"><span>스테디윈스 주식회사</span><span>2</span></div>
   </div>
 </section>
 
-<!-- 3. 제품·서비스 -->
+<!-- 3. 서비스 -->
 <section class="page" data-p="3">
   <div class="pad">
-    <div class="run"><img src="assets/steadywins-ko.svg" alt="스테디윈스"><span class="pg">서비스 라인</span></div>
-    <div class="head big">
-      <h2>참여부터 성과 데이터까지,<br>자체 개발 서비스</h2>
-    </div>
-    <div class="bento">
-      <div class="box l">
-        <span class="badge">운영 중</span>
-        <h3 lang="en">VolunTRIP</h3>
-        <div class="cat" lang="en">Participation &amp; Action Platform</div>
-        <p>참여를 실제 행동과 데이터로 잇는 시민 참여 앱(iOS, Android)과 기관용 관리자 화면입니다.</p>
+    <div class="top"><img src="assets/steadywins-ko.svg" alt="스테디윈스"><span>회사소개서 2027</span></div>
+    <h2 class="ptitle">서비스</h2>
+    <p class="psub">참여부터 성과 데이터까지, 스테디윈스가 직접 개발해 운영합니다.</p>
+
+    <div class="svcs">
+      <div class="svc vt">
+        <span class="state">운영 중</span>
+        <h3>볼런트립<small lang="en">VolunTRIP</small></h3>
+        <div class="kind">시민 참여 앱 · 기관용 관리자</div>
+        <p>참여를 실제 행동과 데이터로 잇습니다.</p>
         <ul>
           <li>위치, 사진, 본인 인증으로 실제 활동을 확인합니다.</li>
-          <li>참여 활동이 1365 자원봉사포털 봉사시간으로 인정됩니다.</li>
-          <li>기관이 템플릿으로 캠페인을 직접 만들고 운영합니다.</li>
-          <li>대시보드와 보고서(PDF, 엑셀)를 자동으로 만듭니다.</li>
+          <li>1365 자원봉사포털 봉사시간으로 인정됩니다.</li>
+          <li>기관이 캠페인을 직접 만들고 운영합니다.</li>
+          <li>대시보드와 보고서를 자동으로 만듭니다.</li>
         </ul>
         <div class="phone"><img src="assets/shot-app.jpg" alt="볼런트립 앱 홈 화면"></div>
       </div>
-      <div class="box m">
-        <span class="badge">운영 중</span>
-        <h3 lang="en">ESG Impact Platform</h3>
-        <p>기관의 이름과 로고로 운영하는 참여·ESG 플랫폼을 구축합니다.</p>
-        <ul>
-          <li>기관 전용 웹사이트에서 활동과 성과를 공개합니다.</li>
-          <li>전담 조직을 따로 두지 않고 구독으로 시작합니다.</li>
-        </ul>
-      </div>
-      <div class="box s">
-        <span class="badge dev">개발·검증 중</span>
-        <h3 lang="en">Impact AI Engine</h3>
-        <p>현장의 증거를 측정 가능한 성과로 바꿉니다.</p>
-      </div>
-      <div class="box s">
-        <span class="badge dev">개발 중</span>
-        <h3 lang="en">Issue Atlas</h3>
-        <p>지역 문제를 데이터로 찾고 판단합니다.</p>
+      <div class="right">
+        <div class="svc">
+          <span class="state">운영 중</span>
+          <h3>기관 전용 ESG 플랫폼<small lang="en">ESG Impact Platform</small></h3>
+          <div class="kind">기관 이름과 로고로 운영하는 참여 플랫폼</div>
+          <ul>
+            <li>기관 전용 웹사이트에서 활동과 성과를 공개합니다.</li>
+            <li>전담 조직 없이 구독으로 시작합니다.</li>
+          </ul>
+        </div>
+        <div class="next">
+          <h4>준비 중인 서비스</h4>
+          <dl>
+            <dt>임팩트 분석</dt><dd>현장의 증거를 측정 가능한 성과로 바꿉니다. (Impact AI Engine)</dd>
+            <dt>지역 이슈 진단</dt><dd>지역 문제를 데이터로 찾고 판단합니다. (Issue Atlas)</dd>
+          </dl>
+        </div>
       </div>
     </div>
-    <p class="note" style="margin-top:2.4mm">상태는 2026년 11월 기준입니다. 점선 표시는 아직 출시하지 않은 서비스입니다.</p>
 
-    <div class="sec" style="margin-top:9mm">관리자 화면</div>
+    <div class="sec">관리자 화면</div>
     <div class="admin">
       <div class="ph"><img src="assets/ph-admin.jpg" alt="볼런트립 관리자 화면. 캠페인 참여 현황과 달성률이 보인다."></div>
-      <div class="adtx">
+      <div>
         <div><b>실시간 운영</b><p>캠페인별 참여 현황과 달성률을 바로 확인하고, 참여자와 리워드를 관리합니다.</p></div>
         <div><b>평가 기준별 증빙</b><p>경영평가, GRI, SDGs 항목에 맞춰 결과와 증빙 자료를 정리합니다.</p></div>
       </div>
@@ -516,119 +289,103 @@ body.impose .page{page-break-after:auto;break-after:auto;flex:none}
   </div>
 </section>
 
-<!-- 4. 사례 -->
+<!-- 4. 주요 실적 및 사례 -->
 <section class="page" data-p="4">
   <div class="pad">
-    <div class="run"><img src="assets/steadywins-ko.svg" alt="스테디윈스"><span class="pg">주요 실적 및 사례</span></div>
-    <div class="head big">
-      <h2>앱 출시 이후,<br>기록으로 남은 참여입니다.</h2>
+    <div class="top"><img src="assets/steadywins-ko.svg" alt="스테디윈스"><span>회사소개서 2027</span></div>
+    <h2 class="ptitle">주요 실적 및 사례</h2>
+
+    <div class="sec" style="margin-top:6mm">함께한 기관</div>
+    <div class="orgs">
+      <span>경기관광공사</span><span>화성시자원봉사센터</span><span>경기도여성가족재단</span><span>화성시연구원</span>
+      <span>용인시자원봉사센터</span><span>백석대학교</span><span>한국전력기술</span><span>경기도 31개 시·군</span>
     </div>
+
+    <div class="sec">운영 실적</div>
     <div class="stats">
       <div class="stat"><div class="num">26,505<span>회</span></div><div class="lab">시민·임직원 참여</div></div>
       <div class="stat"><div class="num">18,252<span>시간</span></div><div class="lab">봉사 참여 시간</div></div>
       <div class="stat"><div class="num">226,266<span>건</span></div><div class="lab">캠페인 미션 완료</div></div>
       <div class="stat"><div class="num">94.2<span>%</span></div><div class="lab">활동 완수율</div></div>
     </div>
-    <p class="note" style="margin-top:2mm">근거: 볼런트립 관리자 집계, 2025년 7월 20일(앱 출시일)부터 2026년 11월 10일까지. 공공기관 7곳에서 운영 중이며 경기도 31개 시·군에 적용 계약을 맺었습니다.</p>
+    <p class="small" style="margin-top:2mm">볼런트립 관리자 집계. 2025년 7월 20일(앱 출시일)부터 2026년 11월 10일까지. 공공기관 7곳에서 운영 중입니다.</p>
 
-    <div class="sec" style="margin-top:8mm">대표 사례</div>
+    <div class="sec">대표 사례</div>
     <div class="cases">
       <div class="case">
         <div class="ph"><img src="assets/ph-case-map.jpg" alt="휠체어를 탄 여행자가 경사로 난간 옆에서 휴대폰으로 사진을 찍고 있다."><span class="draft">시안용 사진</span></div>
-        <div class="who">경기관광공사 · 무장애 관광</div>
+        <div class="who">경기관광공사</div>
         <h3>모두의여행지도</h3>
-        <p>시민이 관광지의 경사로와 화장실 같은 무장애 시설을 찍어 제보합니다. 경기도 31개 시·군의 관광지가 참여합니다. 모은 정보는 전용 사이트에서 공개합니다.</p>
+        <p>시민이 관광지의 경사로와 화장실 같은 무장애 시설을 찍어 제보합니다. 경기도 31개 시·군의 관광지가 참여합니다.</p>
       </div>
       <div class="case">
         <div class="ph"><img src="assets/ph-case-plogging.jpg" alt="우비를 입은 참여자들이 풀숲에서 쓰레기를 줍고 있다."></div>
-        <div class="who">화성시자원봉사센터 · 환경</div>
+        <div class="who">화성시자원봉사센터</div>
         <h3>화성시 에코플로깅</h3>
-        <p>화성호 횡단 10km 구간을 상시 플로깅 코스로 만들었습니다. 2024년 5월부터 운영합니다. 위치 마커 한 곳부터 참여하고 봉사시간으로 인정받습니다.</p>
+        <p>화성호 횡단 10km 구간을 상시 플로깅 코스로 만들었습니다. 2024년 5월부터 운영하며 봉사시간으로 인정받습니다.</p>
       </div>
       <div class="case">
         <div class="ph"><img src="assets/ph-case-bongdam.jpg" alt="발표자가 단상에서 봉담권역 대학가 상권 조사 결과를 설명하고 있다." style="object-position:50% 70%"></div>
-        <div class="who">화성시 봉담권역 · 리빙랩</div>
-        <h3>봉담권역 대학가 활성화 리빙랩</h3>
-        <p>학생과 지역 상인의 생활 경험을 조사해 지역 변화의 출발점을 찾았습니다. 조사와 참여 워크숍을 운영하고 최종 연구보고서를 제출했습니다.</p>
+        <div class="who">화성시 봉담권역</div>
+        <h3>대학가 활성화 리빙랩</h3>
+        <p>학생과 지역 상인의 생활 경험을 조사해 지역 변화의 출발점을 찾고, 최종 연구보고서를 제출했습니다.</p>
       </div>
-    </div>
-
-        <div class="more">
-      <div><b>경기도여성가족재단</b><span>임직원이 일상에서 실천한 ESG 활동을 앱으로 기록하는 캠페인</span></div>
-      <div><b>백석대학교</b><span>학생이 지역의 문제 장소를 조사하고 행정 제안서를 쓰는 리빙랩(충남 RISE)</span></div>
-      <div><b>한국전력기술</b><span>에너지·환경 교육 뒤의 실천 활동 기록(우시산 협업)</span></div>
-      <div><b>화성시연구원</b><span>대학생 생활 패턴과 지역 상권 이용 실태 조사</span></div>
-      <div><b>용인시자원봉사센터</b><span>시민의 동네 탐방과 지역 활동을 돕는 헬퍼스하이</span></div>
-      <div><b>자체 개발 상품</b><span>탐조·식물 등 생물다양성을 기록하는 시민과학 여행</span></div>
     </div>
     <div class="foot"><span>스테디윈스 주식회사</span><span>4</span></div>
   </div>
 </section>
 
-<!-- 5. 이력·인증·연락처 -->
+<!-- 5. 연혁 및 인증 -->
 <section class="page" data-p="5">
   <div class="pad">
-    <div class="run"><img src="assets/steadywins-ko.svg" alt="스테디윈스"><span class="pg">연혁 및 인증</span></div>
-    <div class="head big">
-      <h2>꾸준히 쌓은 이력,<br>공인받은 자격</h2>
-    </div>
+    <div class="top"><img src="assets/steadywins-ko.svg" alt="스테디윈스"><span>회사소개서 2027</span></div>
+    <h2 class="ptitle">연혁 및 인증</h2>
 
-    <div class="sec" style="margin-top:9mm">걸어온 길</div>
+    <div class="sec" style="margin-top:6mm">연혁</div>
     <div class="tline">
-      <div class="axis"><span>과거</span><span>현재</span></div>
       <div class="tl">
-        <div class="dot"></div>
         <div class="yr">2022–2023</div>
         <ul><li><i>22.04</i>스테디윈스 설립</li><li><i>23.12</i>사회적기업가 육성사업 최우수상</li></ul>
       </div>
       <div class="tl">
-        <div class="dot"></div>
         <div class="yr">2024</div>
         <ul><li><i>07</i>볼런트립 웹 서비스 출시</li><li><i>07</i>경기도 ESG 비즈니스 네트워크 운영사</li><li><i>10</i>ISO 14001 인증</li><li><i>11</i>예비사회적기업 지정</li></ul>
       </div>
       <div class="tl">
-        <div class="dot"></div>
         <div class="yr">2025</div>
         <ul><li><i>07</i>볼런트립 앱 정식 출시</li><li><i>07</i>경기도 ESG 해커톤 우수아이디어상</li><li><i>09</i>화성시장상(정책 유공)</li><li><i>10</i>특허 출원</li><li><i>11</i>GKL ESG 온 6기 우수기업</li><li><i>11</i>경기관광공사 IR 피칭대회 최우수상</li></ul>
       </div>
       <div class="tl now">
-        <div class="dot"></div>
         <div class="yr">2026<span>진행 중</span></div>
         <ul><li><i>02</i>경기도 31개 시·군 무장애 관광 캠페인</li><li><i>02</i>화성시 사회적경제 우수기업</li><li><i>04</i>소셜벤처기업 판별</li><li><i>07</i>벤처기업 확인</li><li><i>10</i>기업부설연구소 인정</li><li><i>10</i>경기도 AI 멤버십 기업 선정</li></ul>
       </div>
     </div>
 
-    <div class="sec" style="margin-top:9mm">인증·자격 현황</div>
+    <div class="sec">인증·자격</div>
     <div class="certs">
-      <div class="cert"><div class="ci"><img src="assets/cert-presocial.jpg" alt="예비사회적기업 지정서"></div><span>예비사회적기업 지정서<small>경기도 · 2024.11</small></span></div>
-      <div class="cert"><div class="ci"><img src="assets/cert-social.jpg" alt="소셜벤처기업 판별 통지서"></div><span>소셜벤처기업 판별 통지서<small>중소벤처기업부 · 2026.04</small></span></div>
-      <div class="cert"><div class="ci"><img src="assets/cert-venture.jpg" alt="벤처기업확인서"></div><span>벤처기업확인서<small>벤처기업확인기관 · 2026.07</small></span></div>
-      <div class="cert"><div class="ci"><img src="assets/cert-iso.jpg" alt="ISO 14001 인증서"></div><span>ISO 14001 인증서<small>환경경영시스템 · 2024.10</small></span></div>
-      <div class="cert"><div class="ci"><img src="assets/cert-lab.jpg" alt="기업부설연구소 인정 통지"></div><span>기업부설연구소 인정 통지<small>한국산업기술진흥협회 · 2026.10</small></span></div>
-      <div class="cert"><div class="ci"><img src="assets/cert-1365.jpg" alt="1365 자원봉사 활동처 인증서"></div><span>1365 자원봉사 활동처 인증서<small>화성시자원봉사센터 · 2026.10</small></span></div>
+      <div class="cert"><div class="ci"><img src="assets/cert-venture.jpg" alt="벤처기업확인서"></div><b>벤처기업확인서</b><span>2026.07 · 유효 2029.07</span></div>
+      <div class="cert"><div class="ci"><img src="assets/cert-presocial.jpg" alt="예비사회적기업 지정서"></div><b>예비사회적기업 지정서</b><span>경기도 · 2024.11</span></div>
+      <div class="cert"><div class="ci"><img src="assets/cert-social.jpg" alt="소셜벤처기업 판별 통지서"></div><b>소셜벤처기업 판별</b><span>중소벤처기업부 · 2026.04</span></div>
+      <div class="cert"><div class="ci"><img src="assets/cert-iso.jpg" alt="ISO 14001 인증서"></div><b>ISO 14001 인증서</b><span>환경경영시스템 · 2024.10</span></div>
     </div>
-    <div class="chips"><span>경기도 AI 멤버십 기업</span><span>특허 출원 1건</span><span>상표 등록</span></div>
+    <p class="also"><b>그 밖의 자격</b>기업부설연구소 인정(2026.10) · 1365 자원봉사 활동처 인증 · 경기도 AI 멤버십 기업 · 특허 출원 1건</p>
 
-    <div class="contact">
-      <div class="cinfo">
-        <div class="sec">회사 정보</div>
-        <dl>
-          <dt>회사명</dt><dd>스테디윈스 주식회사 (STEADYWINS Inc.)</dd>
-          <dt>대표</dt><dd>오규림</dd>
-          <dt>설립</dt><dd>2022년 4월</dd>
-          <dt>본사</dt><dd>경기도 화성시 병점구 병점3로 24, 114호</dd>
-          <dt>연구소</dt><dd>경기도 성남시 분당구 판교로289번길 20, 2동 602호</dd>
-        </dl>
-      </div>
-      <div class="cask">
-        <div class="sec">협업 문의</div>
-        <p class="ask">함께 일할 방법을 찾고 있다면<br>이야기를 들려주세요.</p>
+    <div class="sec">회사 정보 및 문의</div>
+    <div class="info">
+      <dl>
+        <dt>회사명</dt><dd>스테디윈스 주식회사 (STEADYWINS Inc.)</dd>
+        <dt>대표</dt><dd>오규림</dd>
+        <dt>설립</dt><dd>2022년 4월</dd>
+        <dt>본사</dt><dd>경기도 화성시 병점구 병점3로 24, 114호</dd>
+        <dt>연구소</dt><dd>경기도 성남시 분당구 판교로289번길 20, 2동 602호</dd>
+      </dl>
+      <div>
+        <p class="tel">전화 <span class="todo">[대표전화 확인 필요]</span></p>
         <p class="mail">partner@steadywins.kr</p>
-        <p class="site">steadywins.kr</p>
+        <p class="web">steadywins.kr</p>
       </div>
     </div>
-    <p class="note" style="margin-top:3mm">이 자료의 수치와 연혁은 2026년 11월 기준입니다.</p>
-    <div class="foot"><span>스테디윈스 주식회사</span><span>5</span></div>
+    <div class="foot"><span>수치와 연혁은 2026년 11월 기준입니다.</span><span>5</span></div>
   </div>
 </section>
 
@@ -640,9 +397,9 @@ body.impose .page{page-break-after:auto;break-after:auto;flex:none}
     <p class="slogan" lang="en">Leave it better.</p>
   </div>
   <div class="pad">
-    <div class="bottom">
-      <p class="copy">© 2026 STEADYWINS Inc.</p>
-      <p class="web">steadywins.kr<br>partner@steadywins.kr</p>
+    <div class="contact">
+      <div><b>스테디윈스 주식회사</b><br>경기도 화성시 병점구 병점3로 24, 114호</div>
+      <div>steadywins.kr<br>partner@steadywins.kr</div>
     </div>
   </div>
 </section>
