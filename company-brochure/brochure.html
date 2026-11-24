@@ -371,6 +371,18 @@ img{display:block}
 .essay{margin-top:7mm;column-count:2;column-gap:10mm}
 .essay p{font-size:10.2pt;line-height:1.82;break-inside:avoid;margin-bottom:4mm}
 
+
+/* 2쪽 사업분야: 제목, 사진, 설명, 사례 */
+.biz .no{margin-top:0}
+.biz h3{font-size:10.6pt;min-height:2.7em}
+.biz .ph{height:34mm;margin-top:2.6mm}
+.biz .bd{font-size:8.2pt;line-height:1.6;margin-top:2.6mm;min-height:5em}
+.biz .bk{font-size:7.6pt;line-height:1.6;font-weight:500;margin-top:2mm;padding-top:2mm;border-top:.25mm solid var(--line)}
+.biz .bk i{display:block;font-style:normal;font-size:6.8pt;font-weight:600;color:var(--muted);margin-bottom:.6mm}
+/* 3쪽: 실제 비율의 휴대폰 */
+.box.l .phone{width:31mm;height:auto;right:6mm;bottom:6mm;border:1.2mm solid var(--black);border-radius:4.5mm}
+.box.l .phone img{width:100%;height:auto}
+
 /* 접지 대지(인쇄용 터잡기) */
 body.impose{background:#fff}
 body.impose .sheet{width:630mm;height:297mm;display:flex;page-break-after:always;break-after:page}
@@ -417,32 +429,32 @@ body.impose .page{page-break-after:auto;break-after:auto;flex:none}
     <div class="sec" style="margin-top:11mm">사업분야</div>
     <div class="bizs">
       <div class="biz">
-        <div class="ph"><img src="assets/ph-research.jpg" alt="강당에서 참여자들이 테이블에 둘러앉아 조사 결과를 함께 읽고 있다."></div>
         <span class="no">01</span>
         <h3>지역사회 조사·연구와<br>참여 프로젝트</h3>
-        <p class="bq">우리 지역의 문제는 무엇이며, 누가 함께 풀 수 있는가?</p>
-        <div class="tags"><span>시민과학</span><span>리빙랩</span><span>교육</span></div>
+        <div class="ph"><img src="assets/ph-research.jpg" alt="강당에서 참여자들이 테이블에 둘러앉아 조사 결과를 함께 읽고 있다."></div>
+        <p class="bd">시민과 학생이 지역의 문제를 직접 조사하고 기록합니다. 결과는 연구와 행정 제안의 자료가 됩니다.</p>
+        <p class="bk"><i>사례</i>봉담권역 대학가 리빙랩<br>백석대학교 지역조사 리빙랩<br>화성시연구원 상권 실태 조사</p>
       </div>
       <div class="biz">
-        <div class="ph"><img src="assets/ph-tour.jpg" alt="호숫가 산책로를 배낭을 멘 사람들이 함께 걷고 있다."><span class="draft">시안용 사진</span></div>
         <span class="no">02</span>
         <h3>지속가능관광<br>콘텐츠·프로그램</h3>
-        <p class="bq">지역을 찾은 사람은 무엇을 경험하고, 무엇을 남기는가?</p>
-        <div class="tags"><span>소셜투어</span><span>생태</span><span>지역 특화 프로그램</span></div>
+        <div class="ph"><img src="assets/ph-tour.jpg" alt="호숫가 산책로를 배낭을 멘 사람들이 함께 걷고 있다."><span class="draft">시안용 사진</span></div>
+        <p class="bd">지역의 생태·환경·사회 문제를 주제로, 참여자의 경험을 지역 이해와 행동으로 잇는 여행을 만듭니다.</p>
+        <p class="bk"><i>사례</i>경기도 모두의여행지도<br>생물다양성 탐조여행<br>화성 융건릉 프로그램</p>
       </div>
       <div class="biz">
-        <div class="ph"><img src="assets/ph-case-plogging.jpg" alt="우비를 입은 참여자들이 풀숲에서 쓰레기를 줍고 있다."></div>
         <span class="no">03</span>
         <h3>ESG·CSR 실행·<br>성과관리 플랫폼</h3>
-        <p class="bq">누가 무엇을 했고, 어떤 성과를 만들었는가?</p>
-        <div class="tags"><span>볼런트립</span><span>기관 맞춤형 플랫폼</span><span>임팩트 리포팅</span></div>
+        <div class="ph"><img src="assets/ph-case-plogging.jpg" alt="우비를 입은 참여자들이 풀숲에서 쓰레기를 줍고 있다."></div>
+        <p class="bd">시민과 임직원은 앱으로 참여하고, 기관은 활동과 성과를 관리자 화면과 보고서로 관리합니다.</p>
+        <p class="bk"><i>사례</i>화성시 에코플로깅<br>용인시 헬퍼스하이<br>경기도여성가족재단 임직원 ESG</p>
       </div>
       <div class="biz">
-        <div class="ph"><img src="assets/ph-data.jpg" alt="워크숍장에 세워 둔 설문판에 참여자들이 붙인 빨간 스티커가 모여 있다." style="object-position:50% 80%"></div>
         <span class="no">04</span>
         <h3>사회문제<br>데이터·AI 솔루션</h3>
-        <p class="bq">지역사회에 무슨 일이 일어나고 있으며, 어떤 대응이 필요한가?</p>
-        <div class="tags"><span>참여형 데이터 수집·생성</span><span>지역 이슈 진단</span><span>AI 에이전트</span></div>
+        <div class="ph"><img src="assets/ph-data.jpg" alt="워크숍장에 세워 둔 설문판에 참여자들이 붙인 빨간 스티커가 모여 있다." style="object-position:50% 80%"></div>
+        <p class="bd">참여 활동에서 모은 데이터로 지역의 이슈를 읽습니다. 진단과 AI 기능은 개발 중입니다.</p>
+        <p class="bk"><i>키워드</i>참여형 데이터 수집·생성<br>지역 이슈 진단<br>AI 에이전트</p>
       </div>
     </div>
     <div class="foot"><span>스테디윈스 주식회사</span><span>2</span></div>
