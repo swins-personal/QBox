@@ -13,7 +13,7 @@
 ## 매일 처리 절차
 
 1. `Word.pdf`를 내려받아 페이지별 이미지로 렌더링한다 (`pdftoppm -r 90 -png`).
-2. 이미 처리한 날짜는 시트 `Page log` 탭에서 확인한다. 정리본 페이지(텍스트에 `IELTS Vocabulary`, `손글씨 페이지 정리본`)는 건너뛴다.
+2. 이미 처리한 날짜는 시트 `단어DB`의 학습일·원본 페이지와 `처리기록` 탭에서 확인한다. 정리본 페이지(텍스트에 `IELTS Vocabulary`, `손글씨 페이지 정리본`)는 건너뛴다.
 3. 새 손글씨 페이지의 단어를 읽는다.
    - 영역(Word test / Listening / Reading / Writing / Speaking / Extra)과 날짜를 페이지 머리에서 가져온다.
    - Word test: 검은 글씨 = 내가 쓴 철자(`wrong`), 빨간 글씨 = 정답(`word`).
