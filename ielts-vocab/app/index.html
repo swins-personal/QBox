@@ -1,0 +1,435 @@
+<title>IELTS Word Box</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,700;1,6..72,500&family=IBM+Plex+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: one-column phone app; notebook ruled-paper ground, dictionary-entry cards, bottom tab bar */
+:root {
+  --paper: #fbfcfa; --ink: #18222d; --muted: #66727f; --rule: #e3ebe6;
+  --card: #ffffff; --mint: #12a874; --mint-soft: #ddf5ea; --amber: #c98a12; --red: #cf3d52; --red-soft: #fbe6e9;
+  --shadow: 0 1px 2px rgb(24 34 45 / .06), 0 8px 24px rgb(24 34 45 / .07);
+  --f-word: "Newsreader", "Times New Roman", serif;
+  --f-body: "IBM Plex Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --paper: #10161d; --ink: #e8eef2; --muted: #93a1ad; --rule: #1e2a33;
+  --card: #17212a; --mint: #3fd39b; --mint-soft: #133528; --amber: #e6b04a; --red: #f07a8b; --red-soft: #3a1c23;
+  --shadow: 0 1px 2px rgb(0 0 0 / .3), 0 8px 24px rgb(0 0 0 / .25); color-scheme: dark } }
+:root[data-theme="dark"] {
+  --paper: #10161d; --ink: #e8eef2; --muted: #93a1ad; --rule: #1e2a33;
+  --card: #17212a; --mint: #3fd39b; --mint-soft: #133528; --amber: #e6b04a; --red: #f07a8b; --red-soft: #3a1c23;
+  --shadow: 0 1px 2px rgb(0 0 0 / .3), 0 8px 24px rgb(0 0 0 / .25); color-scheme: dark }
+
+html, body { height: 100%; }
+body { background: var(--paper); color: var(--ink); font-family: var(--f-body); font-size: 15px; line-height: 1.5;
+  background-image: repeating-linear-gradient(to bottom, transparent 0 31px, var(--rule) 31px 32px); -webkit-tap-highlight-color: transparent; }
+.app { max-width: 480px; margin: 0 auto; min-height: 100%; display: flex; flex-direction: column;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 12px calc(84px + env(safe-area-inset-bottom, 0px)); }
+button { font: inherit; color: inherit; border: 0; background: none; cursor: pointer; }
+button:focus-visible, input:focus-visible { outline: 2px solid var(--mint); outline-offset: 2px; }
+h1, h2 { text-wrap: balance; }
+.top { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding-block: 8px 14px; }
+.brand { font-family: var(--f-word); font-size: 26px; font-weight: 700; letter-spacing: -.3px; }
+.brand em { color: var(--mint); font-style: italic; font-weight: 500; }
+.sub { color: var(--muted); font-size: 13px; }
+.mono { font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
+.view[hidden] { display: none !important; }
+
+/* home */
+.hero { background: var(--card); border-radius: 18px; padding: 18px; box-shadow: var(--shadow); display: grid; gap: 14px; }
+.hero .due { display: flex; align-items: baseline; gap: 8px; }
+.hero .due b { font-family: var(--f-word); font-size: 54px; line-height: 1; font-weight: 700; }
+.bar { height: 8px; border-radius: 8px; background: var(--rule); overflow: hidden; display: flex; }
+.bar i { display: block; height: 100%; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12.5px; color: var(--muted); }
+.legend span::before { content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 5px; background: var(--c); }
+.cta { display: block; width: 100%; padding: 15px; border-radius: 14px; background: var(--mint); color: var(--paper); font-weight: 700; font-size: 16px; text-align: center; }
+.cta:disabled { opacity: .45; }
+.label { font-size: 12px; letter-spacing: .8px; text-transform: uppercase; color: var(--muted); font-weight: 700; margin: 22px 2px 8px; }
+.modes { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.mode { background: var(--card); border-radius: 14px; padding: 14px; text-align: left; box-shadow: var(--shadow); display: grid; gap: 2px; }
+.mode b { font-size: 15px; } .mode span { font-size: 12.5px; color: var(--muted); }
+.chips { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
+.chip { flex: none; padding: 7px 13px; border-radius: 999px; background: var(--card); border: 1px solid var(--rule); font-size: 13.5px; white-space: nowrap; }
+.chip[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.note { font-size: 13px; color: var(--muted); padding: 10px 2px; }
+
+/* study */
+.studyhead { display: flex; align-items: center; gap: 10px; padding-block: 4px 12px; }
+.studyhead .x { width: 36px; height: 36px; border-radius: 50%; background: var(--card); box-shadow: var(--shadow); font-size: 18px; }
+.studyhead .bar { flex: 1; }
+.card { background: var(--card); border-radius: 22px; box-shadow: var(--shadow); padding: 26px 22px; min-height: 340px;
+  display: flex; flex-direction: column; gap: 14px; position: relative; }
+.sec { font-size: 11.5px; letter-spacing: .8px; text-transform: uppercase; color: var(--mint); font-weight: 700; }
+.word { font-family: var(--f-word); font-size: 40px; font-weight: 700; line-height: 1.1; letter-spacing: -.4px; overflow-wrap: anywhere; }
+.pos { font-family: var(--f-word); font-style: italic; color: var(--muted); font-size: 17px; }
+.speak { position: absolute; top: 18px; right: 16px; width: 40px; height: 40px; border-radius: 50%; background: var(--mint-soft); color: var(--mint); font-size: 18px; }
+.back { display: grid; gap: 10px; border-top: 1px dashed var(--rule); padding-top: 14px; }
+.ko { font-size: 20px; font-weight: 700; }
+.row { font-size: 14px; color: var(--muted); } .row b { color: var(--ink); font-weight: 500; }
+.ex { font-family: var(--f-word); font-style: italic; font-size: 17px; line-height: 1.45; }
+.wrong { display: inline-block; background: var(--red-soft); color: var(--red); border-radius: 6px; padding: 1px 7px; font-size: 13px; text-decoration: line-through; }
+.hint { margin-top: auto; text-align: center; color: var(--muted); font-size: 13px; }
+.grade { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 14px; }
+.grade button { padding: 14px 6px; border-radius: 14px; font-weight: 700; display: grid; gap: 1px; background: var(--card); box-shadow: var(--shadow); }
+.grade button small { font-weight: 400; font-size: 11.5px; color: var(--muted); }
+.g0 { color: var(--red); } .g1 { color: var(--amber); } .g2 { color: var(--mint); }
+.opts { display: grid; gap: 10px; margin-top: 14px; }
+.opt { text-align: left; padding: 14px 16px; border-radius: 14px; background: var(--card); box-shadow: var(--shadow); font-size: 15.5px; border: 2px solid transparent; }
+.opt.ok { border-color: var(--mint); background: var(--mint-soft); } .opt.no { border-color: var(--red); background: var(--red-soft); }
+.spell { display: grid; gap: 10px; margin-top: 14px; }
+.spell input { width: 100%; font: 500 22px var(--f-word); padding: 14px 16px; border-radius: 14px; border: 2px solid var(--rule); background: var(--card); color: var(--ink); }
+.spell input.ok { border-color: var(--mint); } .spell input.no { border-color: var(--red); }
+.diff { font-family: var(--f-mono); font-size: 15px; letter-spacing: 1px; overflow-wrap: anywhere; }
+.diff .m { color: var(--red); text-decoration: underline; }
+.next { display: block; width: 100%; margin-top: 10px; padding: 14px; border-radius: 14px; background: var(--ink); color: var(--paper); font-weight: 700; }
+.done { text-align: center; display: grid; gap: 12px; padding-block: 30px; }
+.done b { font-family: var(--f-word); font-size: 40px; }
+
+/* list */
+.search { width: 100%; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--rule); background: var(--card); color: var(--ink); font: inherit; margin-bottom: 10px; }
+.list { display: grid; gap: 8px; }
+.item { background: var(--card); border-radius: 14px; padding: 12px 14px; box-shadow: var(--shadow); display: grid; grid-template-columns: 1fr auto; gap: 2px 10px; text-align: left; width: 100%; }
+.item .w { font-family: var(--f-word); font-size: 19px; font-weight: 700; min-width: 0; overflow-wrap: anywhere; }
+.item .k { grid-column: 1; font-size: 13.5px; color: var(--muted); }
+.lv { grid-row: 1 / 3; grid-column: 2; align-self: center; display: flex; gap: 3px; }
+.lv i { width: 6px; height: 18px; border-radius: 3px; background: var(--rule); }
+.lv i.on { background: var(--mint); }
+.item.open .more { display: grid; }
+.more { display: none; grid-column: 1 / -1; gap: 6px; padding-top: 8px; margin-top: 6px; border-top: 1px dashed var(--rule); }
+
+/* tab bar */
+.tabs { position: fixed; left: 0; right: 0; bottom: 0; background: var(--card); border-top: 1px solid var(--rule); z-index: 5;
+  padding-bottom: env(safe-area-inset-bottom, 0px); padding-left: env(safe-area-inset-left, 0px); padding-right: env(safe-area-inset-right, 0px); }
+.tabs nav { max-width: 480px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); }
+.tabs button { padding: 10px 0 12px; font-size: 12px; color: var(--muted); display: grid; justify-items: center; gap: 2px; }
+.tabs button b { font-size: 19px; line-height: 1.2; font-weight: 400; }
+.tabs button[aria-current="page"] { color: var(--mint); font-weight: 700; }
+.toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(80px + env(safe-area-inset-bottom, 0px)); background: var(--ink); color: var(--paper); padding: 9px 16px; border-radius: 999px; font-size: 13px; z-index: 6; }
+@media (prefers-reduced-motion: no-preference) { .card { animation: pop .18s ease-out; } @keyframes pop { from { transform: translateY(6px); opacity: .6 } } }
+</style>
+
+<div class="app">
+  <header class="top">
+    <div class="brand">Word <em>Box</em></div>
+    <div class="sub" id="streak"></div>
+  </header>
+
+  <!-- HOME -->
+  <section class="view" id="v-home">
+    <div class="hero">
+      <div>
+        <div class="sub">오늘 복습할 단어</div>
+        <div class="due"><b class="mono" id="dueN">–</b><span class="sub" id="dueSub">불러오는 중…</span></div>
+      </div>
+      <div class="bar" id="mastery" aria-label="단어 숙련도"></div>
+      <div class="legend" id="legend"></div>
+      <button class="cta" id="startBtn" disabled>복습 시작</button>
+    </div>
+
+    <div class="label">학습 범위</div>
+    <div class="chips" id="dateChips" role="group" aria-label="공부한 날짜"></div>
+    <div class="chips" id="secChips" role="group" aria-label="영역" style="margin-top:8px"></div>
+
+    <div class="label">학습 모드</div>
+    <div class="modes">
+      <button class="mode" data-mode="cards"><b>플래시카드</b><span>단어 보고 뜻 떠올리기</span></button>
+      <button class="mode" data-mode="quiz"><b>뜻 고르기</b><span>4지선다</span></button>
+      <button class="mode" data-mode="reverse"><b>단어 고르기</b><span>뜻 보고 영어 고르기</span></button>
+      <button class="mode" data-mode="spell"><b>받아쓰기</b><span>듣고 철자 쓰기</span></button>
+    </div>
+    <p class="note" id="scopeNote"></p>
+  </section>
+
+  <!-- STUDY -->
+  <section class="view" id="v-study" hidden>
+    <div class="studyhead">
+      <button class="x" id="quit" aria-label="그만하기">×</button>
+      <div class="bar"><i id="prog" style="background:var(--mint);width:0"></i></div>
+      <span class="sub mono" id="progT"></span>
+    </div>
+    <div id="stage"></div>
+  </section>
+
+  <!-- LIST -->
+  <section class="view" id="v-list" hidden>
+    <input class="search" id="q" type="search" placeholder="단어나 뜻으로 찾기" autocomplete="off">
+    <div class="list" id="list"></div>
+  </section>
+
+  <!-- STATS -->
+  <section class="view" id="v-stats" hidden></section>
+</div>
+
+<div class="tabs"><nav>
+  <button data-tab="home" aria-current="page"><b>◎</b>오늘</button>
+  <button data-tab="list"><b>≡</b>단어장</button>
+  <button data-tab="stats"><b>▦</b>기록</button>
+</nav></div>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+(() => {
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const LS = { get(k, d) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch { return d; } },
+             set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} } };
+const today = () => { const d = new Date(); d.setMinutes(d.getMinutes() - d.getTimezoneOffset()); return d.toISOString().slice(0, 10); };
+const addDays = (iso, n) => { const d = new Date(iso + "T00:00:00Z"); d.setUTCDate(d.getUTCDate() + n); return d.toISOString().slice(0, 10); };
+const INTERVAL = [0, 1, 2, 4, 7, 15, 30];          // Leitner box -> days until next review
+const MAXBOX = INTERVAL.length - 1;
+const SECS = ["Word test", "Listening", "Reading", "Writing", "Speaking", "Extra"];
+const SECNAME = { "Word test": "철자 테스트", Listening: "Listening", Reading: "Reading", Writing: "Writing", Speaking: "Speaking", Extra: "기타" };
+
+let words = LS.get("wb.words", []);
+let state = LS.get("wb.state", { p: {}, log: {} });
+let filt = LS.get("wb.filter", { date: "all", sec: "all" });
+let db = null, stateRef = null, dirty = false, saving = false, timer = null;
+
+/* ---------- persistence ---------- */
+function queueSave() {
+  LS.set("wb.state", state);
+  dirty = true; clearTimeout(timer); timer = setTimeout(flush, 1500);
+}
+async function flush() {
+  if (!stateRef || !dirty || saving) return;
+  saving = true; dirty = false;
+  try { await stateRef.set(JSON.parse(JSON.stringify(state))); }
+  catch (e) { dirty = true; if (e?.code === "quota_exceeded") toast("저장 공간이 가득 찼어요"); }
+  saving = false; if (dirty) { clearTimeout(timer); timer = setTimeout(flush, 1500); }
+}
+document.addEventListener("visibilitychange", () => { if (document.hidden) flush(); });
+
+function mergeState(remote) {
+  if (!remote) return;
+  const p = { ...(remote.p || {}) };
+  for (const [id, v] of Object.entries(state.p)) if (!p[id] || (v.t || 0) > (p[id].t || 0)) p[id] = v;
+  const log = { ...(remote.log || {}) };
+  for (const [d, n] of Object.entries(state.log || {})) log[d] = Math.max(n, log[d] || 0);
+  state = { p, log };
+}
+
+async function boot() {
+  render();
+  if (!window.claude?.use) { status(words.length ? "" : "이 화면에서는 단어장을 불러올 수 없어요."); return; }
+  db = await window.claude.use("db");
+  const user = await window.claude.use("user");
+  if (!db) { status(words.length ? "오프라인 사본을 보여주고 있어요." : "단어장을 불러오려면 claude.ai에 로그인해 주세요."); return; }
+  const uid = user ? await user.id() : null;
+  const slow = setTimeout(() => status("단어장 서버 응답이 늦어요. 마지막으로 받은 목록을 보여줍니다."), 10000);
+  db.collection("words").onSnapshot(snap => {
+    if (!snap.metadata.fromCache) clearTimeout(slow);
+    words = snap.docs.map(d => ({ id: d.id, ...d.data() })).filter(w => w.word);
+    words.sort((a, b) => (b.date || "").localeCompare(a.date || "") || a.id.localeCompare(b.id));
+    LS.set("wb.words", words); render();
+  }, () => { clearTimeout(slow); status("단어장을 불러오지 못했어요."); });
+  if (uid) {
+    stateRef = db.doc("data/users/" + uid + "/progress");
+    try { const s = await stateRef.get(); if (s.exists) { mergeState(s.data()); LS.set("wb.state", state); render(); } } catch {}
+  }
+}
+function status(t) { const el = $("#scopeNote"); if (el) el.textContent = t; }
+
+/* ---------- scheduling ---------- */
+const prog = id => state.p[id] || null;
+const isDue = w => { const p = prog(w.id); return !p || p.due <= today(); };
+function scoped() {
+  return words.filter(w => (filt.date === "all" || w.date === filt.date) && (filt.sec === "all" || w.section === filt.sec));
+}
+function grade(w, g) {          // g: 0 = 몰라요, 1 = 애매, 2 = 알아요
+  const p = prog(w.id) || { b: 0, r: 0, x: 0 };
+  p.b = g === 2 ? Math.min(MAXBOX, p.b + 1) : g === 1 ? Math.max(1, p.b) : 0;
+  p.r = (p.r || 0) + 1; if (g === 0) p.x = (p.x || 0) + 1;
+  p.due = addDays(today(), g === 0 ? 0 : INTERVAL[p.b]); p.t = Date.now();
+  state.p[w.id] = p; state.log[today()] = (state.log[today()] || 0) + 1;
+  queueSave();
+}
+
+/* ---------- speech (browser voice) ---------- */
+let voice = null;
+function pickVoice() { try { const v = speechSynthesis.getVoices(); voice = v.find(x => /en-GB/i.test(x.lang)) || v.find(x => /^en/i.test(x.lang)) || null; } catch {} }
+try { pickVoice(); speechSynthesis.onvoiceschanged = pickVoice; } catch {}
+function say(text) {
+  try { speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(text); u.lang = voice?.lang || "en-GB"; if (voice) u.voice = voice; u.rate = .9; speechSynthesis.speak(u); }
+  catch { toast("이 브라우저에서는 발음 듣기를 쓸 수 없어요"); }
+}
+const canSpeak = "speechSynthesis" in window;
+
+/* ---------- home ---------- */
+function render() { renderHome(); if (!$("#v-list").hidden) renderList(); if (!$("#v-stats").hidden) renderStats(); }
+function renderHome() {
+  const dates = [...new Set(words.map(w => w.date))].sort().reverse();
+  if (filt.date !== "all" && !dates.includes(filt.date)) filt.date = "all";
+  $("#dateChips").innerHTML = [["all", "전체"], ...dates.map(d => [d, d.slice(2).replaceAll("-", "/")])]
+    .map(([v, t]) => `<button class="chip" data-date="${esc(v)}" aria-pressed="${filt.date === v}">${esc(t)}</button>`).join("");
+  const secs = SECS.filter(s => words.some(w => w.section === s));
+  $("#secChips").innerHTML = [["all", "모든 영역"], ...secs.map(s => [s, SECNAME[s] || s])]
+    .map(([v, t]) => `<button class="chip" data-sec="${esc(v)}" aria-pressed="${filt.sec === v}">${esc(t)}</button>`).join("");
+
+  const list = scoped(), due = list.filter(isDue);
+  $("#dueN").textContent = words.length ? due.length : "–";
+  $("#dueSub").textContent = words.length ? `/ ${list.length}개 중` : (db === null ? "" : "불러오는 중…");
+  $("#startBtn").disabled = !due.length;
+  $("#startBtn").textContent = due.length ? `복습 시작 · ${Math.min(due.length, 20)}개` : (list.length ? "오늘 복습 끝! 다른 모드로 연습해 보세요" : "단어가 아직 없어요");
+  const lvl = { n: 0, l: 0, k: 0, m: 0 };
+  for (const w of list) { const p = prog(w.id); if (!p) lvl.n++; else if (p.b <= 1) lvl.l++; else if (p.b < 4) lvl.k++; else lvl.m++; }
+  const tot = list.length || 1, segs = [["m", "var(--mint)", "외움"], ["k", "color-mix(in srgb, var(--mint) 55%, var(--rule))", "익숙함"], ["l", "var(--amber)", "학습 중"], ["n", "var(--rule)", "새 단어"]];
+  $("#mastery").innerHTML = segs.map(([k, c]) => `<i style="width:${lvl[k] / tot * 100}%;background:${c}"></i>`).join("");
+  $("#legend").innerHTML = segs.map(([k, c, t]) => `<span style="--c:${c}">${t} <b class="mono">${lvl[k]}</b></span>`).join("");
+  const streak = calcStreak(); $("#streak").textContent = streak ? `${streak}일 연속 학습` : "";
+}
+function calcStreak() { let n = 0, d = today(); if (!state.log[d]) d = addDays(d, -1); while (state.log[d]) { n++; d = addDays(d, -1); } return n; }
+
+document.addEventListener("click", e => {
+  const c = e.target.closest("[data-date],[data-sec]");
+  if (c) { if (c.dataset.date) filt.date = c.dataset.date; if (c.dataset.sec) filt.sec = c.dataset.sec; LS.set("wb.filter", filt); renderHome(); }
+});
+
+/* ---------- study session ---------- */
+let S = null;
+const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.random() * (i + 1) | 0; [a[i], a[j]] = [a[j], a[i]]; } return a; };
+function start(mode) {
+  const pool = scoped();
+  if (!pool.length) { toast("선택한 범위에 단어가 없어요"); return; }
+  let q = mode === "due" ? pool.filter(isDue) : pool.slice();
+  // weakest first: new and low-box words, most-missed words
+  q = shuffle(q).sort((a, b) => ((prog(a.id)?.b ?? -1) - (prog(b.id)?.b ?? -1)) || ((prog(b.id)?.x || 0) - (prog(a.id)?.x || 0))).slice(0, 20);
+  q = shuffle(q);
+  S = { mode: mode === "due" ? "cards" : mode, q, i: 0, right: 0, again: [] };
+  show("study"); step();
+}
+$("#startBtn").onclick = () => start("due");
+document.querySelectorAll("[data-mode]").forEach(b => b.onclick = () => start(b.dataset.mode));
+$("#quit").onclick = () => { flush(); show("home"); };
+
+function head(w) {
+  return `<div class="sec">${esc(SECNAME[w.section] || w.section)} · ${esc((w.date || "").slice(2).replaceAll("-", "/"))}</div>
+    ${canSpeak ? `<button class="speak" data-say="${esc(w.word)}" aria-label="발음 듣기">♪</button>` : ""}`;
+}
+function backHtml(w) {
+  return `<div class="back">
+    <div class="ko">${esc(w.ko)}</div>
+    ${w.syn ? `<div class="row">≈ <b>${esc(w.syn)}</b></div>` : ""}
+    ${w.def ? `<div class="row">${esc(w.def)}</div>` : ""}
+    ${w.ex ? `<div class="ex">${esc(w.ex)}</div>` : ""}
+    ${w.wrong ? `<div class="row">내가 쓴 철자 <span class="wrong">${esc(w.wrong)}</span></div>` : ""}
+    ${w.note ? `<div class="row">✎ ${esc(w.note)}</div>` : ""}
+  </div>`;
+}
+function progress() {
+  const n = S.q.length + S.again.length;
+  $("#prog").style.width = (S.i / Math.max(1, S.q.length) * 100) + "%";
+  $("#progT").textContent = `${Math.min(S.i + 1, S.q.length)} / ${S.q.length}`;
+}
+function step() {
+  if (S.i >= S.q.length) {
+    if (S.again.length && S.mode === "cards") { S.q = S.q.concat(S.again); S.again = []; }
+    else return finish();
+  }
+  progress();
+  const w = S.q[S.i], st = $("#stage");
+  if (S.mode === "cards") {
+    st.innerHTML = `<div class="card" id="fc">${head(w)}<div><div class="word">${esc(w.word)}</div><div class="pos">${esc(w.pos)}</div></div>
+      <div id="bk" hidden>${backHtml(w)}</div><div class="hint" id="hint">탭해서 뜻 보기</div></div>
+      <div class="grade" id="gr" hidden><button class="g0" data-g="0">몰라요<small>다시</small></button><button class="g1" data-g="1">애매해요<small>내일</small></button><button class="g2" data-g="2">알아요<small>${INTERVAL[Math.min(MAXBOX, (prog(w.id)?.b || 0) + 1)]}일 뒤</small></button></div>`;
+    $("#fc").onclick = e => { if (e.target.closest("[data-say]")) return; $("#bk").hidden = false; $("#gr").hidden = false; $("#hint").hidden = true; };
+    $("#gr").onclick = e => { const b = e.target.closest("[data-g]"); if (!b) return; const g = +b.dataset.g; grade(w, g); if (g === 2) S.right++; if (g === 0) S.again.push(w); S.i++; step(); };
+  } else if (S.mode === "quiz" || S.mode === "reverse") {
+    const rev = S.mode === "reverse";
+    const others = shuffle(words.filter(x => x.id !== w.id && x.ko !== w.ko)).slice(0, 3);
+    const opts = shuffle([w, ...others]);
+    st.innerHTML = `<div class="card">${head(w)}${rev ? `<div class="ko" style="font-size:24px">${esc(w.ko)}</div>${w.syn ? `<div class="row">≈ ${esc(w.syn)}</div>` : ""}`
+      : `<div><div class="word">${esc(w.word)}</div><div class="pos">${esc(w.pos)}</div></div>`}<div id="bk" hidden>${backHtml(w)}</div></div>
+      <div class="opts" id="opts">${opts.map(o => `<button class="opt" data-id="${esc(o.id)}">${esc(rev ? o.word : o.ko)}</button>`).join("")}</div>`;
+    if (rev) st.querySelector(".speak")?.remove();
+    $("#opts").onclick = e => {
+      const b = e.target.closest(".opt"); if (!b || $("#opts").dataset.done) return; $("#opts").dataset.done = 1;
+      const ok = b.dataset.id === w.id; b.classList.add(ok ? "ok" : "no");
+      $("#opts").querySelector(`[data-id="${CSS.escape(w.id)}"]`).classList.add("ok");
+      grade(w, ok ? 2 : 0); if (ok) S.right++;
+      if (rev) $("#bk").innerHTML = `<div class="back"><div class="word" style="font-size:30px">${esc(w.word)}</div>${w.ex ? `<div class="ex">${esc(w.ex)}</div>` : ""}</div>`;
+      $("#bk").hidden = false;
+      const nx = document.createElement("button"); nx.className = "next"; nx.textContent = "다음"; nx.onclick = () => { S.i++; step(); }; $("#opts").after(nx); nx.focus();
+    };
+  } else if (S.mode === "spell") {
+    st.innerHTML = `<div class="card">${head(w)}<div class="ko" style="font-size:22px">${esc(w.ko)}</div><div class="pos">${esc(w.pos)} · ${w.word.length}글자</div>
+      ${w.ex ? `<div class="ex">${esc(w.ex.replace(new RegExp(w.word.split(" ")[0].slice(0, Math.max(4, w.word.length - 3)) + "\\w*", "ig"), "_____"))}</div>` : ""}
+      <div id="bk" hidden></div></div>
+      <form class="spell" id="sp"><input id="sp-in" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="철자를 입력하세요" aria-label="철자"><button class="next">확인</button></form>`;
+    if (canSpeak) setTimeout(() => say(w.word), 250);
+    const inp = $("#sp-in"); inp.focus();
+    $("#sp").onsubmit = e => {
+      e.preventDefault();
+      if ($("#sp").dataset.done) { S.i++; return step(); }
+      const ans = inp.value.trim().toLowerCase(), ok = ans === w.word.toLowerCase();
+      inp.classList.add(ok ? "ok" : "no"); inp.readOnly = true; $("#sp").dataset.done = 1; $("#sp button").textContent = "다음";
+      grade(w, ok ? 2 : 0); if (ok) S.right++;
+      $("#bk").innerHTML = `<div class="back"><div class="diff">${diff(ans, w.word)}</div><div class="word" style="font-size:30px">${esc(w.word)}</div>${w.ex ? `<div class="ex">${esc(w.ex)}</div>` : ""}</div>`;
+      $("#bk").hidden = false;
+    };
+  }
+}
+function diff(a, b) {     // mark letters of the answer that differ from the correct spelling
+  if (!a) return "<span class='sub'>(빈칸)</span>";
+  return [...a].map((c, i) => c === (b[i] || "").toLowerCase() ? esc(c) : `<span class="m">${esc(c)}</span>`).join("");
+}
+function finish() {
+  flush();
+  const n = S.q.length;
+  $("#prog").style.width = "100%";
+  $("#stage").innerHTML = `<div class="card done"><div class="sub">세션 완료</div><b class="mono">${S.right} / ${n}</b>
+    <div class="sub">${S.right === n ? "전부 맞혔어요." : "틀린 단어는 다음 복습에 먼저 나와요."}</div>
+    <button class="cta" id="again">한 번 더</button><button class="next" id="home2">처음으로</button></div>`;
+  $("#again").onclick = () => start(S.mode); $("#home2").onclick = () => show("home");
+  renderHome();
+}
+document.addEventListener("click", e => { const s = e.target.closest("[data-say]"); if (s) { e.stopPropagation(); say(s.dataset.say); } }, true);
+
+/* ---------- list ---------- */
+function renderList() {
+  const q = ($("#q").value || "").trim().toLowerCase();
+  const items = words.filter(w => !q || [w.word, w.ko, w.syn].some(v => (v || "").toLowerCase().includes(q)));
+  $("#list").innerHTML = items.length ? items.map(w => {
+    const b = prog(w.id)?.b || 0;
+    return `<button class="item" data-open="${esc(w.id)}"><span class="w">${esc(w.word)}</span>
+      <span class="lv" aria-label="숙련도 ${b}/${MAXBOX}">${Array.from({ length: MAXBOX }, (_, i) => `<i class="${i < b ? "on" : ""}"></i>`).join("")}</span>
+      <span class="k">${esc(w.pos)} ${esc(w.ko)}</span><span class="more">${backHtml(w)}</span></button>`;
+  }).join("") : `<p class="note">${words.length ? "찾는 단어가 없어요." : "아직 단어가 없어요. 굿노트에 적은 단어가 정리되면 여기에 쌓여요."}</p>`;
+}
+$("#q").addEventListener("input", renderList);
+$("#list").addEventListener("click", e => { const it = e.target.closest("[data-open]"); if (it && !e.target.closest("[data-say]")) it.classList.toggle("open"); });
+
+/* ---------- stats ---------- */
+function renderStats() {
+  const days = Array.from({ length: 28 }, (_, i) => addDays(today(), i - 27));
+  const max = Math.max(1, ...days.map(d => state.log[d] || 0));
+  const hard = words.filter(w => (prog(w.id)?.x || 0) > 0).sort((a, b) => prog(b.id).x - prog(a.id).x).slice(0, 10);
+  const byDate = [...new Set(words.map(w => w.date))].sort().reverse();
+  $("#v-stats").innerHTML = `
+    <div class="hero"><div class="sub">최근 4주 복습량</div>
+      <svg viewBox="0 0 280 70" width="100%" role="img" aria-label="일별 복습 횟수">${days.map((d, i) =>
+        `<rect x="${i * 10 + 1}" y="${64 - (state.log[d] || 0) / max * 58}" width="8" height="${Math.max(1, (state.log[d] || 0) / max * 58)}" rx="2" fill="${state.log[d] ? "var(--mint)" : "var(--rule)"}"><title>${d}: ${state.log[d] || 0}</title></rect>`).join("")}
+        <line x1="0" y1="65" x2="280" y2="65" stroke="var(--rule)"/></svg>
+      <div class="legend"><span style="--c:var(--mint)">총 복습 <b class="mono">${Object.values(state.log).reduce((a, b) => a + b, 0)}</b></span><span style="--c:var(--amber)">연속 <b class="mono">${calcStreak()}</b>일</span></div></div>
+    <div class="label">자주 틀린 단어</div>
+    <div class="list">${hard.length ? hard.map(w => `<div class="item"><span class="w">${esc(w.word)}</span><span class="lv mono sub">✗ ${prog(w.id).x}</span><span class="k">${esc(w.ko)}</span></div>`).join("") : `<p class="note">아직 틀린 단어가 없어요.</p>`}</div>
+    <div class="label">날짜별 단어</div>
+    <div class="list">${byDate.map(d => { const ws = words.filter(w => w.date === d), m = ws.filter(w => (prog(w.id)?.b || 0) >= 4).length;
+      return `<div class="item"><span class="w mono" style="font-size:16px">${esc(d)}</span><span class="lv mono sub">${m}/${ws.length}</span><span class="k">${[...new Set(ws.map(w => SECNAME[w.section] || w.section))].map(esc).join(" · ")}</span></div>`; }).join("")}</div>`;
+}
+
+/* ---------- nav ---------- */
+function show(v) {
+  ["home", "study", "list", "stats"].forEach(k => $("#v-" + k).hidden = k !== v);
+  document.querySelectorAll("[data-tab]").forEach(b => b.dataset.tab === (v === "study" ? "home" : v) ? b.setAttribute("aria-current", "page") : b.removeAttribute("aria-current"));
+  if (v === "list") renderList(); if (v === "stats") renderStats(); if (v === "home") renderHome();
+  window.scrollTo(0, 0);
+}
+document.querySelectorAll("[data-tab]").forEach(b => b.onclick = () => { if (S && !$("#v-study").hidden) flush(); show(b.dataset.tab); });
+let tt; function toast(t) { const el = $("#toast"); el.textContent = t; el.hidden = false; clearTimeout(tt); tt = setTimeout(() => el.hidden = true, 2200); }
+
+boot();
+})();
+</script>
