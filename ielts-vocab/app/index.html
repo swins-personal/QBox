@@ -109,6 +109,9 @@ h1, h2 { text-wrap: balance; }
 .tabs button[aria-current="page"] { color: var(--mint); font-weight: 700; }
 .toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(80px + env(safe-area-inset-bottom, 0px)); background: var(--ink); color: var(--paper); padding: 9px 16px; border-radius: 999px; font-size: 13px; z-index: 6; }
 @media (prefers-reduced-motion: no-preference) { .card { animation: pop .18s ease-out; } @keyframes pop { from { transform: translateY(6px); opacity: .6 } } }
+.status { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; background: var(--red-soft); color: var(--ink); border-radius: 12px; padding: 10px 14px; font-size: 13.5px; margin-bottom: 12px; }
+.status[hidden] { display: none; }
+.link { color: var(--mint); font-weight: 700; text-decoration: underline; }
 </style>
 
 <div class="app">
@@ -117,20 +120,25 @@ h1, h2 { text-wrap: balance; }
     <div class="sub" id="streak"></div>
   </header>
 
+  <div class="status" id="status" hidden>
+    <span id="statusText"></span>
+    <button class="link" id="statusBtn" hidden></button>
+  </div>
+
   <!-- HOME -->
   <section class="view" id="v-home">
     <div class="hero">
       <div>
         <div class="sub">오늘 복습할 단어</div>
-        <div class="due"><b class="mono" id="dueN">–</b><span class="sub" id="dueSub">불러오는 중…</span></div>
+        <div class="due"><b class="mono" id="dueN">–</b><span class="sub" id="dueSub">시트에서 불러오는 중…</span></div>
       </div>
-      <div class="bar" id="mastery" aria-label="단어 숙련도"></div>
+      <div class="bar" id="mastery" aria-label="인지상태 분포"></div>
       <div class="legend" id="legend"></div>
       <button class="cta" id="startBtn" disabled>복습 시작</button>
     </div>
 
     <div class="label">학습 범위</div>
-    <div class="chips" id="dateChips" role="group" aria-label="공부한 날짜"></div>
+    <div class="chips" id="dateChips" role="group" aria-label="학습일"></div>
     <div class="chips" id="secChips" role="group" aria-label="영역" style="margin-top:8px"></div>
 
     <div class="label">학습 모드</div>
@@ -140,7 +148,7 @@ h1, h2 { text-wrap: balance; }
       <button class="mode" data-mode="reverse"><b>단어 고르기</b><span>뜻 보고 영어 고르기</span></button>
       <button class="mode" data-mode="spell"><b>받아쓰기</b><span>듣고 철자 쓰기</span></button>
     </div>
-    <p class="note" id="scopeNote"></p>
+    <p class="note" id="syncNote"></p>
   </section>
 
   <!-- STUDY -->
@@ -172,115 +180,179 @@ h1, h2 { text-wrap: balance; }
 
 <script>
 (() => {
+/* The Google Sheet "IELTS 단어 DB" is the only database.
+   Words are read from tab 단어DB; grading writes 인지상태 (M), 마지막 복습일 (O), 다음 복습일 (P), 복습 횟수 (Q). */
+const SHEET_ID = "1bZrU54WYy17DyGjA1PhxPoBhkW6yZpHqYgvmg3EHsC8";
+const TAB = "단어DB";
+const SERVER = "Google Sheets";
+const COL = { id: "단어ID", word: "단어", ko: "뜻", syn: "유사어·관련어", forms: "변형·파생어", ex: "예문", exKo: "예문 해석",
+  section: "영역", date: "학습일", raw: "손글씨 원문", score: "인지상태", memo: "수정·학습 메모", last: "마지막 복습일", next: "다음 복습일", count: "복습 횟수", cat: "사진 분류" };
+
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const LS = { get(k, d) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch { return d; } },
              set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} } };
 const today = () => { const d = new Date(); d.setMinutes(d.getMinutes() - d.getTimezoneOffset()); return d.toISOString().slice(0, 10); };
 const addDays = (iso, n) => { const d = new Date(iso + "T00:00:00Z"); d.setUTCDate(d.getUTCDate() + n); return d.toISOString().slice(0, 10); };
-const INTERVAL = [0, 1, 2, 4, 7, 15, 30];          // Leitner box -> days until next review
-const MAXBOX = INTERVAL.length - 1;
+const normDate = v => { const s = String(v ?? "").trim(); const m = s.match(/^(\d{4})[-./](\d{1,2})[-./](\d{1,2})/); return m ? `${m[1]}-${m[2].padStart(2, "0")}-${m[3].padStart(2, "0")}` : ""; };
 const SECS = ["Word test", "Listening", "Reading", "Writing", "Speaking", "Extra"];
-const SECNAME = { "Word test": "철자 테스트", Listening: "Listening", Reading: "Reading", Writing: "Writing", Speaking: "Speaking", Extra: "기타" };
+const SECNAME = { "Word test": "철자 테스트", Extra: "기타" };
 
-let words = LS.get("wb.words", []);
-let state = LS.get("wb.state", { p: {}, log: {} });
+let words = LS.get("wb2.words", []);          // cached copy of the sheet for a fast first paint
+let pending = LS.get("wb2.pending", {});       // grades not yet written to the sheet, by word id
 let filt = LS.get("wb.filter", { date: "all", sec: "all" });
-let db = null, stateRef = null, dirty = false, saving = false, timer = null;
+let mcp = null, writing = false;
 
-/* ---------- persistence ---------- */
-function queueSave() {
-  LS.set("wb.state", state);
-  dirty = true; clearTimeout(timer); timer = setTimeout(flush, 1500);
+/* ---------- scoring (인지상태 0–10) ---------- */
+function interval(score, prev) {
+  if (score <= 4) return 1; if (score <= 6) return 2; if (score <= 8) return 4; if (score === 9) return 7;
+  return prev === 10 ? 30 : 14;
 }
-async function flush() {
-  if (!stateRef || !dirty || saving) return;
-  saving = true; dirty = false;
-  try { await stateRef.set(JSON.parse(JSON.stringify(state))); }
-  catch (e) { dirty = true; if (e?.code === "quota_exceeded") toast("저장 공간이 가득 찼어요"); }
-  saving = false; if (dirty) { clearTimeout(timer); timer = setTimeout(flush, 1500); }
+function grade(w, g) {             // g: 0 몰라요, 1 애매해요, 2 알아요
+  const prev = w.score === "" ? null : +w.score;
+  const s = g === 0 ? 0 : g === 1 ? 5 : prev === null ? 7 : Math.min(10, prev + 3);
+  w.score = s; w.last = today(); w.next = addDays(today(), interval(s, prev)); w.count = (+w.count || 0) + 1;
+  pending[w.id] = { id: w.id, row: w.row, score: w.score, last: w.last, next: w.next, count: w.count };
+  LS.set("wb2.pending", pending); LS.set("wb2.words", words);
+  flush();
 }
-document.addEventListener("visibilitychange", () => { if (document.hidden) flush(); });
+const isDue = w => !w.next || w.next <= today();
+const nextLabel = w => { const prev = w.score === "" ? null : +w.score; const s = prev === null ? 7 : Math.min(10, prev + 3); return interval(s, prev) + "일 뒤"; };
 
-function mergeState(remote) {
-  if (!remote) return;
-  const p = { ...(remote.p || {}) };
-  for (const [id, v] of Object.entries(state.p)) if (!p[id] || (v.t || 0) > (p[id].t || 0)) p[id] = v;
-  const log = { ...(remote.log || {}) };
-  for (const [d, n] of Object.entries(state.log || {})) log[d] = Math.max(n, log[d] || 0);
-  state = { p, log };
+/* ---------- sheet I/O ---------- */
+const valuesOf = r => { const p = r?.payload ?? r; return p?.values || p?.content?.values || []; };
+function errText(e) {
+  switch (e?.code) {
+    case "server_not_connected": return ["Google Sheets 커넥터가 연결되어 있지 않아요. claude.ai 설정 → 커넥터에서 추가해 주세요.", null];
+    case "needs_reauth": return ["Google Sheets 연결이 만료됐어요. claude.ai 설정 → 커넥터에서 다시 연결해 주세요.", null];
+    case "selection_required": return ["Google Sheets 연결이 여러 개예요. 화면에 뜬 선택 창에서 하나를 골라 주세요.", "다시 불러오기"];
+    case "not_in_manifest": case "approval_required": case "consent_required": return ["이 페이지가 Google Sheets를 쓰도록 허용해야 단어를 불러올 수 있어요.", "허용하고 불러오기"];
+    case "blocked_by_policy": return ["조직 정책 때문에 이 페이지에서 Google Sheets를 쓸 수 없어요.", null];
+    case "server_unavailable": case "rate_limited": return ["Google Sheets가 잠시 응답하지 않아요.", "다시 시도"];
+    case "tool_error": return ["시트를 읽지 못했어요: " + (e.message || "").slice(0, 120), "다시 시도"];
+    default: return ["시트와 연결하지 못했어요.", "다시 시도"];
+  }
+}
+function status(text, btn, fn) {
+  $("#status").hidden = !text; $("#statusText").textContent = text || "";
+  const b = $("#statusBtn"); b.hidden = !btn; b.textContent = btn || ""; b.onclick = fn || null;
+}
+
+async function load() {
+  if (!mcp) return;
+  status("");
+  $("#syncNote").textContent = "시트에서 불러오는 중…";
+  try {
+    const r = await mcp.callTool(SERVER, "get_values", { spreadsheetId: SHEET_ID, range: `${TAB}!A1:X` }, { cache: false });
+    const rows = valuesOf(r);
+    if (!rows.length) throw { code: "tool_error", message: "빈 시트" };
+    const H = rows[0].map(h => String(h).trim()), ix = {};
+    for (const [k, name] of Object.entries(COL)) ix[k] = H.indexOf(name);
+    if (ix.id < 0 || ix.word < 0) throw { code: "tool_error", message: "단어ID/단어 열을 찾지 못했어요" };
+    const cell = (row, k) => ix[k] >= 0 ? String(row[ix[k]] ?? "").trim() : "";
+    words = rows.slice(1).map((row, i) => ({
+      row: i + 2, id: cell(row, "id"), word: cell(row, "word"), ko: cell(row, "ko"), syn: cell(row, "syn"), forms: cell(row, "forms"),
+      ex: cell(row, "ex"), exKo: cell(row, "exKo"), section: cell(row, "section") || "기타", date: normDate(cell(row, "date")),
+      raw: cell(row, "raw"), score: cell(row, "score") === "" ? "" : +cell(row, "score"), memo: cell(row, "memo"),
+      last: normDate(cell(row, "last")), next: normDate(cell(row, "next")), count: +cell(row, "count") || 0, cat: cell(row, "cat"),
+    })).filter(w => w.id && w.word);
+    // keep local grades the sheet has not received yet
+    for (const p of Object.values(pending)) { const w = words.find(x => x.id === p.id); if (w) Object.assign(w, { score: p.score, last: p.last, next: p.next, count: p.count }); }
+    words.sort((a, b) => b.date.localeCompare(a.date) || a.row - b.row);
+    LS.set("wb2.words", words);
+    $("#syncNote").textContent = `시트 단어 ${words.length}개 · 방금 불러옴`;
+    render(); flush();
+  } catch (e) {
+    const [t, b] = errText(e);
+    status(t + (words.length ? " 마지막으로 받은 목록을 보여줘요." : ""), b, load);
+    $("#syncNote").textContent = "";
+  }
+}
+
+async function flush() {          // write queued grades to the sheet, one word at a time
+  if (!mcp || writing) return;
+  const items = Object.values(pending);
+  if (!items.length) { renderSync(); return; }
+  writing = true; renderSync();
+  let failed = false;
+  for (const p of items) {
+    try {
+      // confirm the row still holds this word (rows can move if the sheet is edited)
+      const chk = valuesOf(await mcp.callTool(SERVER, "get_values", { spreadsheetId: SHEET_ID, range: `${TAB}!A${p.row}` }, { cache: false }));
+      if (String(chk?.[0]?.[0] ?? "").trim() !== p.id) {
+        const col = valuesOf(await mcp.callTool(SERVER, "get_values", { spreadsheetId: SHEET_ID, range: `${TAB}!A1:A` }, { cache: false }));
+        const i = col.findIndex(r => String(r?.[0] ?? "").trim() === p.id);
+        if (i < 0) { delete pending[p.id]; continue; }      // word was removed from the sheet
+        p.row = i + 1; const w = words.find(x => x.id === p.id); if (w) w.row = p.row;
+      }
+      await mcp.callTool(SERVER, "update_values", { spreadsheetId: SHEET_ID, range: `${TAB}!M${p.row}`, values: [[p.score]] });
+      await mcp.callTool(SERVER, "update_values", { spreadsheetId: SHEET_ID, range: `${TAB}!O${p.row}:Q${p.row}`, values: [[p.last, p.next, p.count]] });
+      if (pending[p.id] === p || (pending[p.id] && pending[p.id].count === p.count)) delete pending[p.id];
+      LS.set("wb2.pending", pending);
+    } catch (e) {
+      const [t] = errText(e);
+      status("채점 결과를 시트에 아직 못 썼어요. 다음 채점 때 다시 보낼게요. (" + t + ")");
+      failed = true; break;
+    }
+  }
+  writing = false; LS.set("wb2.pending", pending); renderSync();
+  if (!failed && Object.values(pending).some(p => !items.includes(p))) flush();   // grades added while writing
+}
+function renderSync() {
+  const n = Object.keys(pending).length;
+  const el = $("#syncNote"); if (!el) return;
+  if (n) el.textContent = writing ? `시트에 저장 중… (${n}개)` : `시트에 아직 저장 안 된 채점 ${n}개`;
+  else if (words.length) el.textContent = `시트 단어 ${words.length}개 · 채점은 시트 인지상태·복습일 칸에 저장돼요`;
 }
 
 async function boot() {
   render();
-  if (!window.claude?.use) { status(words.length ? "" : "이 화면에서는 단어장을 불러올 수 없어요."); return; }
-  db = await window.claude.use("db");
-  const user = await window.claude.use("user");
-  if (!db) { status(words.length ? "오프라인 사본을 보여주고 있어요." : "단어장을 불러오려면 claude.ai에 로그인해 주세요."); return; }
-  const uid = user ? await user.id() : null;
-  const slow = setTimeout(() => status("단어장 서버 응답이 늦어요. 마지막으로 받은 목록을 보여줍니다."), 10000);
-  db.collection("words").onSnapshot(snap => {
-    if (!snap.metadata.fromCache) clearTimeout(slow);
-    words = snap.docs.map(d => ({ id: d.id, ...d.data() })).filter(w => w.word);
-    words.sort((a, b) => (b.date || "").localeCompare(a.date || "") || a.id.localeCompare(b.id));
-    LS.set("wb.words", words); render();
-  }, () => { clearTimeout(slow); status("단어장을 불러오지 못했어요."); });
-  if (uid) {
-    stateRef = db.doc("data/users/" + uid + "/progress");
-    try { const s = await stateRef.get(); if (s.exists) { mergeState(s.data()); LS.set("wb.state", state); render(); } } catch {}
-  }
-}
-function status(t) { const el = $("#scopeNote"); if (el) el.textContent = t; }
-
-/* ---------- scheduling ---------- */
-const prog = id => state.p[id] || null;
-const isDue = w => { const p = prog(w.id); return !p || p.due <= today(); };
-function scoped() {
-  return words.filter(w => (filt.date === "all" || w.date === filt.date) && (filt.sec === "all" || w.section === filt.sec));
-}
-function grade(w, g) {          // g: 0 = 몰라요, 1 = 애매, 2 = 알아요
-  const p = prog(w.id) || { b: 0, r: 0, x: 0 };
-  p.b = g === 2 ? Math.min(MAXBOX, p.b + 1) : g === 1 ? Math.max(1, p.b) : 0;
-  p.r = (p.r || 0) + 1; if (g === 0) p.x = (p.x || 0) + 1;
-  p.due = addDays(today(), g === 0 ? 0 : INTERVAL[p.b]); p.t = Date.now();
-  state.p[w.id] = p; state.log[today()] = (state.log[today()] || 0) + 1;
-  queueSave();
+  mcp = window.claude?.use ? await window.claude.use("mcp") : null;
+  if (!mcp) { status(words.length ? "지금은 시트에 연결할 수 없어 마지막으로 받은 목록을 보여줘요. claude.ai에서 열어 주세요." : "claude.ai에서 이 페이지를 열어야 시트 단어를 불러올 수 있어요."); return; }
+  load();
 }
 
 /* ---------- speech (browser voice) ---------- */
 let voice = null;
 function pickVoice() { try { const v = speechSynthesis.getVoices(); voice = v.find(x => /en-GB/i.test(x.lang)) || v.find(x => /^en/i.test(x.lang)) || null; } catch {} }
 try { pickVoice(); speechSynthesis.onvoiceschanged = pickVoice; } catch {}
+const canSpeak = "speechSynthesis" in window;
 function say(text) {
   try { speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(text); u.lang = voice?.lang || "en-GB"; if (voice) u.voice = voice; u.rate = .9; speechSynthesis.speak(u); }
   catch { toast("이 브라우저에서는 발음 듣기를 쓸 수 없어요"); }
 }
-const canSpeak = "speechSynthesis" in window;
 
 /* ---------- home ---------- */
+const scoped = () => words.filter(w => (filt.date === "all" || w.date === filt.date) && (filt.sec === "all" || w.section === filt.sec));
+const secLabel = s => SECNAME[s] || s;
 function render() { renderHome(); if (!$("#v-list").hidden) renderList(); if (!$("#v-stats").hidden) renderStats(); }
 function renderHome() {
-  const dates = [...new Set(words.map(w => w.date))].sort().reverse();
+  const dates = [...new Set(words.map(w => w.date).filter(Boolean))].sort().reverse();
   if (filt.date !== "all" && !dates.includes(filt.date)) filt.date = "all";
   $("#dateChips").innerHTML = [["all", "전체"], ...dates.map(d => [d, d.slice(2).replaceAll("-", "/")])]
     .map(([v, t]) => `<button class="chip" data-date="${esc(v)}" aria-pressed="${filt.date === v}">${esc(t)}</button>`).join("");
-  const secs = SECS.filter(s => words.some(w => w.section === s));
-  $("#secChips").innerHTML = [["all", "모든 영역"], ...secs.map(s => [s, SECNAME[s] || s])]
+  const present = [...new Set(words.map(w => w.section))];
+  const secs = [...SECS.filter(s => present.includes(s)), ...present.filter(s => !SECS.includes(s))];
+  if (filt.sec !== "all" && !secs.includes(filt.sec)) filt.sec = "all";
+  $("#secChips").innerHTML = [["all", "모든 영역"], ...secs.map(s => [s, secLabel(s)])]
     .map(([v, t]) => `<button class="chip" data-sec="${esc(v)}" aria-pressed="${filt.sec === v}">${esc(t)}</button>`).join("");
 
   const list = scoped(), due = list.filter(isDue);
   $("#dueN").textContent = words.length ? due.length : "–";
-  $("#dueSub").textContent = words.length ? `/ ${list.length}개 중` : (db === null ? "" : "불러오는 중…");
+  $("#dueSub").textContent = words.length ? `/ ${list.length}개 중` : "시트에서 불러오는 중…";
   $("#startBtn").disabled = !due.length;
   $("#startBtn").textContent = due.length ? `복습 시작 · ${Math.min(due.length, 20)}개` : (list.length ? "오늘 복습 끝! 다른 모드로 연습해 보세요" : "단어가 아직 없어요");
   const lvl = { n: 0, l: 0, k: 0, m: 0 };
-  for (const w of list) { const p = prog(w.id); if (!p) lvl.n++; else if (p.b <= 1) lvl.l++; else if (p.b < 4) lvl.k++; else lvl.m++; }
-  const tot = list.length || 1, segs = [["m", "var(--mint)", "외움"], ["k", "color-mix(in srgb, var(--mint) 55%, var(--rule))", "익숙함"], ["l", "var(--amber)", "학습 중"], ["n", "var(--rule)", "새 단어"]];
+  for (const w of list) { if (w.score === "") lvl.n++; else if (w.score <= 4) lvl.l++; else if (w.score <= 8) lvl.k++; else lvl.m++; }
+  const tot = list.length || 1;
+  const segs = [["m", "var(--mint)", "외움 9–10"], ["k", "color-mix(in srgb, var(--mint) 55%, var(--rule))", "익숙 5–8"], ["l", "var(--amber)", "학습 중 0–4"], ["n", "var(--rule)", "미평가"]];
   $("#mastery").innerHTML = segs.map(([k, c]) => `<i style="width:${lvl[k] / tot * 100}%;background:${c}"></i>`).join("");
   $("#legend").innerHTML = segs.map(([k, c, t]) => `<span style="--c:${c}">${t} <b class="mono">${lvl[k]}</b></span>`).join("");
-  const streak = calcStreak(); $("#streak").textContent = streak ? `${streak}일 연속 학습` : "";
+  const st = calcStreak(); $("#streak").textContent = st ? `${st}일 연속 학습` : "";
+  renderSync();
 }
-function calcStreak() { let n = 0, d = today(); if (!state.log[d]) d = addDays(d, -1); while (state.log[d]) { n++; d = addDays(d, -1); } return n; }
+function dayCounts() { const m = {}; for (const w of words) if (w.last) m[w.last] = (m[w.last] || 0) + 1; return m; }
+function calcStreak() { const m = dayCounts(); let n = 0, d = today(); if (!m[d]) d = addDays(d, -1); while (m[d]) { n++; d = addDays(d, -1); } return n; }
 
 document.addEventListener("click", e => {
   const c = e.target.closest("[data-date],[data-sec]");
@@ -290,58 +362,56 @@ document.addEventListener("click", e => {
 /* ---------- study session ---------- */
 let S = null;
 const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.random() * (i + 1) | 0; [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const weak = w => w.score === "" ? -1 : w.score;
 function start(mode) {
   const pool = scoped();
   if (!pool.length) { toast("선택한 범위에 단어가 없어요"); return; }
   let q = mode === "due" ? pool.filter(isDue) : pool.slice();
-  // weakest first: new and low-box words, most-missed words
-  q = shuffle(q).sort((a, b) => ((prog(a.id)?.b ?? -1) - (prog(b.id)?.b ?? -1)) || ((prog(b.id)?.x || 0) - (prog(a.id)?.x || 0))).slice(0, 20);
-  q = shuffle(q);
+  q = shuffle(shuffle(q).sort((a, b) => weak(a) - weak(b) || b.count - a.count).slice(0, 20));
   S = { mode: mode === "due" ? "cards" : mode, q, i: 0, right: 0, again: [] };
   show("study"); step();
 }
 $("#startBtn").onclick = () => start("due");
 document.querySelectorAll("[data-mode]").forEach(b => b.onclick = () => start(b.dataset.mode));
-$("#quit").onclick = () => { flush(); show("home"); };
+$("#quit").onclick = () => show("home");
 
 function head(w) {
-  return `<div class="sec">${esc(SECNAME[w.section] || w.section)} · ${esc((w.date || "").slice(2).replaceAll("-", "/"))}</div>
+  return `<div class="sec">${esc(secLabel(w.section))}${w.date ? " · " + esc(w.date.slice(2).replaceAll("-", "/")) : ""}${w.score !== "" ? " · 인지 " + w.score : ""}</div>
     ${canSpeak ? `<button class="speak" data-say="${esc(w.word)}" aria-label="발음 듣기">♪</button>` : ""}`;
 }
 function backHtml(w) {
+  const rawDiff = w.raw && w.raw.toLowerCase() !== w.word.toLowerCase();
   return `<div class="back">
     <div class="ko">${esc(w.ko)}</div>
     ${w.syn ? `<div class="row">≈ <b>${esc(w.syn)}</b></div>` : ""}
-    ${w.def ? `<div class="row">${esc(w.def)}</div>` : ""}
+    ${w.forms ? `<div class="row">변형 <b>${esc(w.forms)}</b></div>` : ""}
     ${w.ex ? `<div class="ex">${esc(w.ex)}</div>` : ""}
-    ${w.wrong ? `<div class="row">내가 쓴 철자 <span class="wrong">${esc(w.wrong)}</span></div>` : ""}
-    ${w.note ? `<div class="row">✎ ${esc(w.note)}</div>` : ""}
+    ${w.exKo ? `<div class="row">${esc(w.exKo)}</div>` : ""}
+    ${rawDiff ? `<div class="row">손글씨 <span class="wrong">${esc(w.raw)}</span></div>` : ""}
+    ${w.memo ? `<div class="row">✎ ${esc(w.memo)}</div>` : ""}
   </div>`;
 }
 function progress() {
-  const n = S.q.length + S.again.length;
   $("#prog").style.width = (S.i / Math.max(1, S.q.length) * 100) + "%";
   $("#progT").textContent = `${Math.min(S.i + 1, S.q.length)} / ${S.q.length}`;
 }
+function nextBtn(after) { const nx = document.createElement("button"); nx.className = "next"; nx.textContent = "다음"; nx.onclick = () => { S.i++; step(); }; after.after(nx); nx.focus(); }
 function step() {
-  if (S.i >= S.q.length) {
-    if (S.again.length && S.mode === "cards") { S.q = S.q.concat(S.again); S.again = []; }
-    else return finish();
-  }
+  if (S.i >= S.q.length) { if (S.again.length && S.mode === "cards") { S.q = S.q.concat(S.again); S.again = []; } else return finish(); }
   progress();
   const w = S.q[S.i], st = $("#stage");
   if (S.mode === "cards") {
-    st.innerHTML = `<div class="card" id="fc">${head(w)}<div><div class="word">${esc(w.word)}</div><div class="pos">${esc(w.pos)}</div></div>
+    st.innerHTML = `<div class="card" id="fc">${head(w)}<div class="word">${esc(w.word)}</div>
       <div id="bk" hidden>${backHtml(w)}</div><div class="hint" id="hint">탭해서 뜻 보기</div></div>
-      <div class="grade" id="gr" hidden><button class="g0" data-g="0">몰라요<small>다시</small></button><button class="g1" data-g="1">애매해요<small>내일</small></button><button class="g2" data-g="2">알아요<small>${INTERVAL[Math.min(MAXBOX, (prog(w.id)?.b || 0) + 1)]}일 뒤</small></button></div>`;
+      <div class="grade" id="gr" hidden><button class="g0" data-g="0">몰라요<small>인지 0 · 내일</small></button><button class="g1" data-g="1">애매해요<small>인지 5 · 2일 뒤</small></button><button class="g2" data-g="2">알아요<small>${nextLabel(w)}</small></button></div>`;
     $("#fc").onclick = e => { if (e.target.closest("[data-say]")) return; $("#bk").hidden = false; $("#gr").hidden = false; $("#hint").hidden = true; };
     $("#gr").onclick = e => { const b = e.target.closest("[data-g]"); if (!b) return; const g = +b.dataset.g; grade(w, g); if (g === 2) S.right++; if (g === 0) S.again.push(w); S.i++; step(); };
   } else if (S.mode === "quiz" || S.mode === "reverse") {
     const rev = S.mode === "reverse";
-    const others = shuffle(words.filter(x => x.id !== w.id && x.ko !== w.ko)).slice(0, 3);
+    const others = shuffle(words.filter(x => x.id !== w.id && x.ko && x.ko !== w.ko && x.word !== w.word)).slice(0, 3);
     const opts = shuffle([w, ...others]);
     st.innerHTML = `<div class="card">${head(w)}${rev ? `<div class="ko" style="font-size:24px">${esc(w.ko)}</div>${w.syn ? `<div class="row">≈ ${esc(w.syn)}</div>` : ""}`
-      : `<div><div class="word">${esc(w.word)}</div><div class="pos">${esc(w.pos)}</div></div>`}<div id="bk" hidden>${backHtml(w)}</div></div>
+      : `<div class="word">${esc(w.word)}</div>`}<div id="bk" hidden>${backHtml(w)}</div></div>
       <div class="opts" id="opts">${opts.map(o => `<button class="opt" data-id="${esc(o.id)}">${esc(rev ? o.word : o.ko)}</button>`).join("")}</div>`;
     if (rev) st.querySelector(".speak")?.remove();
     $("#opts").onclick = e => {
@@ -350,12 +420,12 @@ function step() {
       $("#opts").querySelector(`[data-id="${CSS.escape(w.id)}"]`).classList.add("ok");
       grade(w, ok ? 2 : 0); if (ok) S.right++;
       if (rev) $("#bk").innerHTML = `<div class="back"><div class="word" style="font-size:30px">${esc(w.word)}</div>${w.ex ? `<div class="ex">${esc(w.ex)}</div>` : ""}</div>`;
-      $("#bk").hidden = false;
-      const nx = document.createElement("button"); nx.className = "next"; nx.textContent = "다음"; nx.onclick = () => { S.i++; step(); }; $("#opts").after(nx); nx.focus();
+      $("#bk").hidden = false; nextBtn($("#opts"));
     };
   } else if (S.mode === "spell") {
-    st.innerHTML = `<div class="card">${head(w)}<div class="ko" style="font-size:22px">${esc(w.ko)}</div><div class="pos">${esc(w.pos)} · ${w.word.length}글자</div>
-      ${w.ex ? `<div class="ex">${esc(w.ex.replace(new RegExp(w.word.split(" ")[0].slice(0, Math.max(4, w.word.length - 3)) + "\\w*", "ig"), "_____"))}</div>` : ""}
+    const stem = w.word.split(" ")[0].slice(0, Math.max(4, w.word.split(" ")[0].length - 3)).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    st.innerHTML = `<div class="card">${head(w)}<div class="ko" style="font-size:22px">${esc(w.ko)}</div><div class="pos">${w.word.length}글자</div>
+      ${w.ex ? `<div class="ex">${esc(w.ex.replace(new RegExp(stem + "[\\w-]*", "ig"), "_____"))}</div>` : ""}
       <div id="bk" hidden></div></div>
       <form class="spell" id="sp"><input id="sp-in" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="철자를 입력하세요" aria-label="철자"><button class="next">확인</button></form>`;
     if (canSpeak) setTimeout(() => say(w.word), 250);
@@ -366,24 +436,22 @@ function step() {
       const ans = inp.value.trim().toLowerCase(), ok = ans === w.word.toLowerCase();
       inp.classList.add(ok ? "ok" : "no"); inp.readOnly = true; $("#sp").dataset.done = 1; $("#sp button").textContent = "다음";
       grade(w, ok ? 2 : 0); if (ok) S.right++;
-      $("#bk").innerHTML = `<div class="back"><div class="diff">${diff(ans, w.word)}</div><div class="word" style="font-size:30px">${esc(w.word)}</div>${w.ex ? `<div class="ex">${esc(w.ex)}</div>` : ""}</div>`;
+      $("#bk").innerHTML = `<div class="back">${ok ? "" : `<div class="diff">${diff(ans, w.word)}</div>`}<div class="word" style="font-size:30px">${esc(w.word)}</div>${w.ex ? `<div class="ex">${esc(w.ex)}</div>` : ""}</div>`;
       $("#bk").hidden = false;
     };
   }
 }
-function diff(a, b) {     // mark letters of the answer that differ from the correct spelling
+function diff(a, b) {
   if (!a) return "<span class='sub'>(빈칸)</span>";
   return [...a].map((c, i) => c === (b[i] || "").toLowerCase() ? esc(c) : `<span class="m">${esc(c)}</span>`).join("");
 }
 function finish() {
-  flush();
   const n = S.q.length;
   $("#prog").style.width = "100%";
   $("#stage").innerHTML = `<div class="card done"><div class="sub">세션 완료</div><b class="mono">${S.right} / ${n}</b>
-    <div class="sub">${S.right === n ? "전부 맞혔어요." : "틀린 단어는 다음 복습에 먼저 나와요."}</div>
+    <div class="sub">${S.right === n ? "전부 맞혔어요." : "틀린 단어는 내일 다시 나와요."}</div>
     <button class="cta" id="again">한 번 더</button><button class="next" id="home2">처음으로</button></div>`;
   $("#again").onclick = () => start(S.mode); $("#home2").onclick = () => show("home");
-  renderHome();
 }
 document.addEventListener("click", e => { const s = e.target.closest("[data-say]"); if (s) { e.stopPropagation(); say(s.dataset.say); } }, true);
 
@@ -391,33 +459,34 @@ document.addEventListener("click", e => { const s = e.target.closest("[data-say]
 function renderList() {
   const q = ($("#q").value || "").trim().toLowerCase();
   const items = words.filter(w => !q || [w.word, w.ko, w.syn].some(v => (v || "").toLowerCase().includes(q)));
-  $("#list").innerHTML = items.length ? items.map(w => {
-    const b = prog(w.id)?.b || 0;
+  $("#list").innerHTML = items.length ? items.slice(0, 300).map(w => {
+    const s = w.score === "" ? 0 : Math.round(w.score / 2);
     return `<button class="item" data-open="${esc(w.id)}"><span class="w">${esc(w.word)}</span>
-      <span class="lv" aria-label="숙련도 ${b}/${MAXBOX}">${Array.from({ length: MAXBOX }, (_, i) => `<i class="${i < b ? "on" : ""}"></i>`).join("")}</span>
-      <span class="k">${esc(w.pos)} ${esc(w.ko)}</span><span class="more">${backHtml(w)}</span></button>`;
-  }).join("") : `<p class="note">${words.length ? "찾는 단어가 없어요." : "아직 단어가 없어요. 굿노트에 적은 단어가 정리되면 여기에 쌓여요."}</p>`;
+      <span class="lv" aria-label="인지상태 ${w.score === "" ? "미평가" : w.score + "/10"}">${Array.from({ length: 5 }, (_, i) => `<i class="${i < s ? "on" : ""}"></i>`).join("")}</span>
+      <span class="k">${esc(secLabel(w.section))} · ${esc(w.ko)}</span><span class="more">${backHtml(w)}</span></button>`;
+  }).join("") : `<p class="note">${words.length ? "찾는 단어가 없어요." : "아직 단어가 없어요."}</p>`;
 }
 $("#q").addEventListener("input", renderList);
 $("#list").addEventListener("click", e => { const it = e.target.closest("[data-open]"); if (it && !e.target.closest("[data-say]")) it.classList.toggle("open"); });
 
 /* ---------- stats ---------- */
 function renderStats() {
+  const m = dayCounts();
   const days = Array.from({ length: 28 }, (_, i) => addDays(today(), i - 27));
-  const max = Math.max(1, ...days.map(d => state.log[d] || 0));
-  const hard = words.filter(w => (prog(w.id)?.x || 0) > 0).sort((a, b) => prog(b.id).x - prog(a.id).x).slice(0, 10);
-  const byDate = [...new Set(words.map(w => w.date))].sort().reverse();
+  const max = Math.max(1, ...days.map(d => m[d] || 0));
+  const hard = words.filter(w => w.score !== "" && w.score <= 4 && w.count > 0).sort((a, b) => a.score - b.score || b.count - a.count).slice(0, 12);
+  const byDate = [...new Set(words.map(w => w.date).filter(Boolean))].sort().reverse();
   $("#v-stats").innerHTML = `
-    <div class="hero"><div class="sub">최근 4주 복습량</div>
-      <svg viewBox="0 0 280 70" width="100%" role="img" aria-label="일별 복습 횟수">${days.map((d, i) =>
-        `<rect x="${i * 10 + 1}" y="${64 - (state.log[d] || 0) / max * 58}" width="8" height="${Math.max(1, (state.log[d] || 0) / max * 58)}" rx="2" fill="${state.log[d] ? "var(--mint)" : "var(--rule)"}"><title>${d}: ${state.log[d] || 0}</title></rect>`).join("")}
+    <div class="hero"><div class="sub">최근 4주, 날짜별 마지막 복습 단어 수</div>
+      <svg viewBox="0 0 280 70" width="100%" role="img" aria-label="일별 복습 단어 수">${days.map((d, i) =>
+        `<rect x="${i * 10 + 1}" y="${64 - (m[d] || 0) / max * 58}" width="8" height="${Math.max(1, (m[d] || 0) / max * 58)}" rx="2" fill="${m[d] ? "var(--mint)" : "var(--rule)"}"><title>${d}: ${m[d] || 0}</title></rect>`).join("")}
         <line x1="0" y1="65" x2="280" y2="65" stroke="var(--rule)"/></svg>
-      <div class="legend"><span style="--c:var(--mint)">총 복습 <b class="mono">${Object.values(state.log).reduce((a, b) => a + b, 0)}</b></span><span style="--c:var(--amber)">연속 <b class="mono">${calcStreak()}</b>일</span></div></div>
-    <div class="label">자주 틀린 단어</div>
-    <div class="list">${hard.length ? hard.map(w => `<div class="item"><span class="w">${esc(w.word)}</span><span class="lv mono sub">✗ ${prog(w.id).x}</span><span class="k">${esc(w.ko)}</span></div>`).join("") : `<p class="note">아직 틀린 단어가 없어요.</p>`}</div>
-    <div class="label">날짜별 단어</div>
-    <div class="list">${byDate.map(d => { const ws = words.filter(w => w.date === d), m = ws.filter(w => (prog(w.id)?.b || 0) >= 4).length;
-      return `<div class="item"><span class="w mono" style="font-size:16px">${esc(d)}</span><span class="lv mono sub">${m}/${ws.length}</span><span class="k">${[...new Set(ws.map(w => SECNAME[w.section] || w.section))].map(esc).join(" · ")}</span></div>`; }).join("")}</div>`;
+      <div class="legend"><span style="--c:var(--mint)">복습한 단어 <b class="mono">${words.filter(w => w.count > 0).length}</b> / ${words.length}</span><span style="--c:var(--amber)">연속 <b class="mono">${calcStreak()}</b>일</span></div></div>
+    <div class="label">아직 약한 단어 (인지 0–4)</div>
+    <div class="list">${hard.length ? hard.map(w => `<div class="item"><span class="w">${esc(w.word)}</span><span class="lv mono sub">인지 ${w.score}</span><span class="k">${esc(w.ko)}</span></div>`).join("") : `<p class="note">아직 없어요.</p>`}</div>
+    <div class="label">학습일별 단어</div>
+    <div class="list">${byDate.map(d => { const ws = words.filter(w => w.date === d), k = ws.filter(w => w.score !== "" && w.score >= 9).length;
+      return `<div class="item"><span class="w mono" style="font-size:16px">${esc(d)}</span><span class="lv mono sub">외움 ${k}/${ws.length}</span><span class="k">${[...new Set(ws.map(w => secLabel(w.section)))].map(esc).join(" · ")}</span></div>`; }).join("")}</div>`;
 }
 
 /* ---------- nav ---------- */
@@ -427,7 +496,7 @@ function show(v) {
   if (v === "list") renderList(); if (v === "stats") renderStats(); if (v === "home") renderHome();
   window.scrollTo(0, 0);
 }
-document.querySelectorAll("[data-tab]").forEach(b => b.onclick = () => { if (S && !$("#v-study").hidden) flush(); show(b.dataset.tab); });
+document.querySelectorAll("[data-tab]").forEach(b => b.onclick = () => show(b.dataset.tab));
 let tt; function toast(t) { const el = $("#toast"); el.textContent = t; el.hidden = false; clearTimeout(tt); tt = setTimeout(() => el.hidden = true, 2200); }
 
 boot();
